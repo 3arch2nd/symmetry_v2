@@ -1903,13 +1903,9 @@ document.getElementById('submit-to-teacher-btn').addEventListener('click', funct
         avgSpeed: document.getElementById('avg-time-display') ? parseFloat(document.getElementById('avg-time-display').innerText) : 0
     };
 
-fetch(CENTRAL_GAS_URL, {
+    fetch(CENTRAL_GAS_URL, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'text/plain;charset=utf-8', 
-        },
-        body: JSON.stringify(payload),
-        redirect: "follow" 
+        body: JSON.stringify(payload)
     })
     .then(res => res.json())
     .then(data => {
