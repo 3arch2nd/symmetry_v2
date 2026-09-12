@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>선대칭/점대칭도형 완전 정복</title>
-    <meta name="description" content="Educational Web App for Elementary School Learning | Education / School / Study / Quiz / Learning Activity for Students" />
-    <meta name="google-site-verification" content="IcQTdvKNRYN4yXt04h1Li8kcdZNJb36etlOugGiJ0lM" />
+    <meta name="description" content="Educational Web App for Elementary School Learning" />
     <meta property="og:title" content="선대칭/점대칭도형 완전 정복">
     <meta property="og:description" content="선대칭, 점대칭도형 문제를 연습해보세요!">
     <meta property="og:image" content="https://3arch2nd.github.io/symmetry/thumb.png">
     <meta property="og:url" content="https://3arch2nd.github.io/symmetry/">
     <meta property="og:type" content="website">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
@@ -41,683 +39,172 @@ body {
     margin: 20px auto;
     box-sizing: border-box;
 }
-h1 {
-    color: #4b8134;
-    margin-bottom: 20px;
-    font-size: 2em;
-}
-h2 {
-    margin-bottom: 5px;
-}
-small {
-    display: block;
-    font-size: 18px;
-    color: #6c757d;
-    margin-bottom: 20px;
-    line-height: 1.5;
-}
+h1 { color: #4b8134; margin-bottom: 20px; font-size: 2em; }
+h2 { margin-bottom: 5px; }
+small { display: block; font-size: 18px; color: #6c757d; margin-bottom: 20px; line-height: 1.5; }
 button {
     font-family: 'Gowun Dodum', sans-serif;
-    padding: 10px 20px;
-    margin: 5px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s, transform 0.1s;
+    padding: 10px 20px; margin: 5px; border: none; border-radius: 8px;
+    cursor: pointer; font-size: 16px; transition: background-color 0.3s, transform 0.1s;
 }
-button:hover {
-    transform: translateY(-1px);
-}
-.primary-btn {
-    background-color: #a0c179;
-    color: white;
-}
-.primary-btn:hover {
-    background-color: #8cb24b;
-}
-.secondary-btn {
-    background-color: #e9e9e9;
-    color: #333;
-    border: none;
-}
-.secondary-btn:hover {
-    background-color: #d9d9d9;
-}
-#clear-canvas-btn {
-    background-color: #e06666;
-    color: white;
-}
-#clear-canvas-btn:hover {
-    background-color: #cc4125;
-}
-.mode-btn-active {
-    background-color: #ffc107;
-    color: #333;
-    font-weight: bold;
-}
-/* 이전에 겹침을 유발했던 display: none; 초기화는 JS showPage() 함수 내에서 처리합니다. */
+button:hover { transform: translateY(-1px); }
+.primary-btn { background-color: #a0c179; color: white; }
+.primary-btn:hover { background-color: #8cb24b; }
+.secondary-btn { background-color: #e9e9e9; color: #333; border: none; }
+.secondary-btn:hover { background-color: #d9d9d9; }
+#clear-canvas-btn { background-color: #e06666; color: white; }
+#clear-canvas-btn:hover { background-color: #cc4125; }
+.mode-btn-active { background-color: #ffc107; color: #333; font-weight: bold; }
 
-#mode-selection-page {
-    /* display: flex;는 JS에서 제어합니다. */
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
+#mode-selection-page { flex-direction: column; justify-content: center; align-items: center; gap: 20px; }
+.mode-buttons { display: flex; gap: 15px; margin-top: 20px; width: 100%; justify-content: space-around; }
+.mode-buttons button { padding: 20px 30px; font-size: 20px; width: 100%; max-width: 250px; }
+#classic-mode-btn { background-color: #ffc107; color: #333; font-weight: bold; }
+#classic-mode-btn:hover { background-color: #fdb827; }
+#time-attack-mode-btn { background-color: #e06666; color: white; font-weight: bold; }
+#time-attack-mode-btn:hover { background-color: #cc4125; }
+.mode-option { display: flex; flex-direction: column; align-items: center; gap: 10px; flex: 1; }
+.mode-description { font-size: 16px; color: #6c757d; line-height: 1.5; }
+
+#setup-page { display: flex; flex-direction: column; gap: 20px; }
+.setting-group { border: 1px solid #ddd; padding: 15px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box; flex-grow: 1; }
+.option-buttons { display: flex; flex-direction: row; justify-content: center; gap: 5px; margin-top: 10px; }
+.option-buttons button { flex-grow: 1; padding: 10px 20px; }
+.option-buttons button.selected { background-color: #ffc107; color: #333; font-weight: bold; }
+
+.canvas-wrapper { position: relative; display: block; margin: 0 auto 20px auto; width: 100%; max-width: 400px; height: auto; aspect-ratio: 1 / 1; border: 2px solid #333; box-sizing: border-box; }
+#grid-canvas { background-color: white; cursor: crosshair; width: 100%; height: 100%; display: block; -webkit-tap-highlight-color: transparent; }
+.user-dot, .problem-dot, .line-dot, .selected-line-dot {
+    width: 8px; height: 8px; border-radius: 50%; position: absolute;
+    transform: translate(-50%, -50%); pointer-events: none; box-shadow: 0 0 3px rgba(0, 0, 0, 0.5); z-index: 10;
 }
-.mode-buttons {
-    display: flex;
-    gap: 15px;
-    margin-top: 20px;
-    width: 100%;
-    justify-content: space-around;
-}
-.mode-buttons button {
-    padding: 20px 30px;
-    font-size: 20px;
-    width: 100%;
-    max-width: 250px;
-}
-#classic-mode-btn {
-    background-color: #ffc107;
-    color: #333;
-    font-weight: bold;
-}
-#classic-mode-btn:hover {
-    background-color: #fdb827;
-}
-#time-attack-mode-btn {
-    background-color: #e06666;
-    color: white;
-    font-weight: bold;
-}
-#time-attack-mode-btn:hover {
-    background-color: #cc4125;
-}
-.mode-option {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    flex: 1;
-}
-.mode-description {
-    font-size: 16px;
-    color: #6c757d;
-    line-height: 1.5;
-}
-#setup-page {
-    display: flex; /* setup-page는 flex 컨테이너로 설정합니다. */
-    flex-direction: column;
-    gap: 20px;
-}
-.setting-group {
-    border: 1px solid #ddd;
-    padding: 15px;
-    border-radius: 8px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-sizing: border-box;
-    flex-grow: 1;
-}
-.option-buttons {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 5px;
-    margin-top: 10px;
-}
-.option-buttons button {
-    flex-grow: 1;
-    padding: 10px 20px;
-}
-.option-buttons button.selected {
-    background-color: #ffc107;
-    color: #333;
-    font-weight: bold;
-}
-.canvas-wrapper {
-    position: relative;
-    display: block;
-    margin: 0 auto 20px auto;
-    width: 100%;
-    max-width: 400px;
-    height: auto;
-    aspect-ratio: 1 / 1;
-    border: 2px solid #333;
-    box-sizing: border-box;
-}
-#grid-canvas {
-    background-color: white;
-    cursor: crosshair;
-    width: 100%;
-    height: 100%;
-    display: block;
-    -webkit-tap-highlight-color: transparent;
-}
-.user-dot {
-    width: 8px;
-    height: 8px;
-    background-color: #dc3545;
-    border-radius: 50%;
-    position: absolute;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
-    z-index: 10;
-}
-.problem-dot, .line-dot {
-    width: 8px;
-    height: 8px;
-    background-color: black;
-    border-radius: 50%;
-    position: absolute;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
-    z-index: 10;
-}
-.selected-line-dot {
-    width: 10px;
-    height: 10px;
-    background-color: #ff0000;
-    border-radius: 50%;
-    position: absolute;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    box-shadow: 0 0 5px rgba(255, 0, 0, 0.8);
-    z-index: 11;
-}
-.canvas-controls {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-.correct, .incorrect {
-    padding: 10px;
-    border-radius: 8px;
-    font-weight: bold;
-    margin-top: 15px;
-}
-.correct { color: #28a745; }
-.incorrect { color: #dc3545; }
-#quantity-control, #time-control {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-}
-#quantity-control button, #time-control button {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    padding: 0;
-    margin: 0;
-    font-size: 20px;
-    font-weight: bold;
-    line-height: 30px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    color: #333;
-}
-#quantity-control button:hover, #time-control button:hover {
-    background-color: #e0e0e0;
-}
-.quantity-display {
-    display: inline-block;
-    width: auto;
-    min-width: 40px;
-    height: auto;
-    background-color: transparent;
-    border-radius: 0;
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    box-shadow: none;
-    vertical-align: baseline;
-    margin: 0;
-    text-align: center;
-}
-.footer {
-    margin-top: 20px;
-    font-size: 12px;
-    color: #ccc;
-    text-align: center;
-}
-.main-layout {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    width: 100%;
-    max-width: 800px;
-    align-items: stretch;
-    flex-wrap: wrap;
-}
-.main-layout h3 {
-    text-align: center;
-}
-.left-panel {
-    flex: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-.right-panel {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-.settings-wrapper {
-    position: relative;
-    flex-grow: 1;
-}
-.right-panel .setting-group, .left-panel .setting-group {
-    flex-grow: 1;
-}
-#start-quiz-btn {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    font-size: 20px;
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-    flex-shrink: 0;
-}
-.setting-group.start-btn-container {
-    border: none;
-    background-color: transparent;
-    padding: 0;
-}
-#settings-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    border-radius: 8px;
-    z-index: 10;
-    padding: 10px;
-    box-sizing: border-box;
-    font-size: 1.1em;
-    font-weight: bold;
-    line-height: 1.5;
-}
-.problem-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-}
-.home-button {
-    background-color: #e9e9e9;
-    color: #333;
-    border-radius: 8px;
-    padding: 8px 12px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-.home-button:hover {
-    background-color: #d9d9d9;
-}
-#problem-number {
-    flex-grow: 1;
-    text-align: center;
-    margin: 0;
-}
-#timer-display {
-    width: 120px;
-    font-size: 1.2em;
-    font-weight: bold;
-    text-align: right;
-    padding-right: 10px;
-    color: #333;
-    display: none;
-}
-#problem-counter-display {
-    width: 120px;
-    font-size: 1em;
-    font-weight: bold;
-    text-align: right;
-    padding-right: 10px;
-    color: #888;
-    display: none;
-}
-#timer-display.time-warning {
-    color: #dc3545;
-    animation: pulse 1s infinite;
-}
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
-.problem-footer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    margin-top: 20px;
-}
-#check-answer-btn {
-    position: relative;
-    overflow: hidden;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    background-color: white;
-    color: black;
-    border: 2px solid #999;
-}
-#check-answer-btn:hover {
-    background-color: #f0f0f0;
-}
-#check-answer-btn, #next-problem-btn {
-    min-width: 180px;
-}
-#next-problem-btn {
-    border: 2px solid transparent;
-}
-#check-answer-btn .progress-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #a0c179;
-    transform: translateX(-100%);
-}
-#check-answer-btn .button-text {
-    position: relative;
-    z-index: 1;
-}
-#check-answer-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.check-answer-guide {
-    font-size: 0.8em;
-    color: #888;
-    margin-top: 8px;
-    transition: color 0.3s ease;
-}
-.popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-}
-.popup-box {
-    background-color: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    position: relative;
-    width: 80%;
-    max-width: 450px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.popup-box .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 28px;
-    font-weight: bold;
-    color: #333;
-    cursor: pointer;
-    background: none;
-    border: none;
-    padding: 0;
-}
+.user-dot { background-color: #dc3545; }
+.problem-dot, .line-dot { background-color: black; }
+.selected-line-dot { width: 10px; height: 10px; background-color: #ff0000; box-shadow: 0 0 5px rgba(255, 0, 0, 0.8); z-index: 11; }
+
+.canvas-controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px; }
+.correct, .incorrect { padding: 10px; border-radius: 8px; font-weight: bold; margin-top: 15px; }
+.correct { color: #28a745; } .incorrect { color: #dc3545; }
+
+#quantity-control, #time-control { display: flex; align-items: center; justify-content: center; gap: 15px; }
+#quantity-control button, #time-control button { width: 30px; height: 30px; border-radius: 50%; padding: 0; margin: 0; font-size: 20px; font-weight: bold; line-height: 30px; background-color: #f0f0f0; border: 1px solid #ccc; color: #333; }
+#quantity-control button:hover, #time-control button:hover { background-color: #e0e0e0; }
+.quantity-display { display: inline-block; min-width: 40px; font-size: 24px; font-weight: bold; color: #333; text-align: center; }
+
+.footer { margin-top: 20px; font-size: 12px; color: #ccc; text-align: center; }
+.main-layout { display: flex; flex-direction: row; gap: 20px; width: 100%; max-width: 800px; align-items: stretch; flex-wrap: wrap; }
+.main-layout h3 { text-align: center; }
+.left-panel { flex: 2; display: flex; flex-direction: column; gap: 20px; }
+.right-panel { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+.settings-wrapper { position: relative; flex-grow: 1; }
+.right-panel .setting-group, .left-panel .setting-group { flex-grow: 1; }
+#start-quiz-btn { width: 100px; height: 100px; border-radius: 50%; font-size: 20px; font-weight: bold; display: flex; justify-content: center; align-items: center; padding: 0; flex-shrink: 0; }
+.setting-group.start-btn-container { border: none; background-color: transparent; padding: 0; }
+#settings-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); color: white; display: flex; justify-content: center; align-items: center; text-align: center; border-radius: 8px; z-index: 10; padding: 10px; box-sizing: border-box; font-size: 1.1em; font-weight: bold; line-height: 1.5; }
+
+.problem-header { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+.home-button { background-color: #e9e9e9; color: #333; border-radius: 8px; padding: 8px 12px; font-size: 14px; display: flex; align-items: center; gap: 5px; cursor: pointer; text-decoration: none; transition: background-color 0.3s; }
+.home-button:hover { background-color: #d9d9d9; }
+#problem-number { flex-grow: 1; text-align: center; margin: 0; }
+#timer-display, #problem-counter-display { width: 120px; font-weight: bold; text-align: right; padding-right: 10px; display: none; }
+#timer-display { font-size: 1.2em; color: #333; }
+#problem-counter-display { font-size: 1em; color: #888; }
+#timer-display.time-warning { color: #dc3545; animation: pulse 1s infinite; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+.problem-footer { display: flex; justify-content: center; align-items: center; width: 100%; margin-top: 20px; }
+#check-answer-btn { position: relative; overflow: hidden; user-select: none; background-color: white; color: black; border: 2px solid #999; min-width: 180px; }
+#check-answer-btn:hover { background-color: #f0f0f0; }
+#next-problem-btn { min-width: 180px; border: 2px solid transparent; }
+#check-answer-btn .progress-bar { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #a0c179; transform: translateX(-100%); }
+#check-answer-btn .button-text { position: relative; z-index: 1; }
+#check-answer-container { display: flex; flex-direction: column; align-items: center; }
+.check-answer-guide { font-size: 0.8em; color: #888; margin-top: 8px; }
+
+.popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 100; }
+.popup-box { background-color: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); position: relative; width: 80%; max-width: 450px; text-align: center; display: flex; flex-direction: column; align-items: center; }
+.popup-box .close-btn { position: absolute; top: 10px; right: 15px; font-size: 28px; font-weight: bold; color: #333; cursor: pointer; background: none; border: none; padding: 0; }
 .popup-box .close-btn:hover { color: #6c757d; }
-.result-popup #popup-main-message {
-    font-size: 1.2em;
-    font-weight: bold;
-    margin-bottom: 0;
-    line-height: 1.5;
-}
+.result-popup #popup-main-message { font-size: 1.2em; font-weight: bold; margin-bottom: 0; line-height: 1.5; }
 .result-popup #popup-detail-message { display: none; }
 .result-popup #popup-next-btn { margin-top: 20px; }
-.final-result-layout {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    margin: 30px 0;
-    gap: 20px;
-}
-.result-left, .result-right {
-    flex: 1;
-    padding: 20px;
-}
-.result-left {
-    border-right: 1px solid #ddd;
-}
-.result-right p {
-    font-size: 1.1em;
-    margin: 15px 0;
-}
-#final-accuracy {
-    font-size: 4em;
-    font-weight: bold;
-    color: #4b8134;
-    margin-top: 10px;
-}
-.score-display {
-    margin-top: 20px;
-    font-size: 1.1em;
-    font-weight: bold;
-}
-#final-score {
-    font-size: 1.4em;
-    font-weight: bold;
-    color: #4b8134;
-    display: inline-block;
-    margin-left: 5px;
-}
-.result-buttons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin-top: 20px;
-    flex-wrap: wrap;
-}
-#qr-code-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    padding: 5px 10px;
-    font-size: 14px;
-    z-index: 20;
-}
-#qr-popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 200;
-}
-.popup-qr {
-    background-color: white;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    position: relative;
-    text-align: center;
-}
-.popup-qr img {
-    max-width: 180px;
-    height: auto;
-}
-.popup-qr p {
-    margin-top: 15px;
-    color: #666;
-}
-.close-btn-qr {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 28px;
-    font-weight: bold;
-    color: #333;
-    cursor: pointer;
-    background: none;
-    border: none;
-    padding: 0;
-}
+
+.final-result-layout { display: flex; flex-direction: row; justify-content: space-around; align-items: center; margin: 30px 0; gap: 20px; }
+.result-left, .result-right { flex: 1; padding: 20px; }
+.result-left { border-right: 1px solid #ddd; }
+.result-right p { font-size: 1.1em; margin: 15px 0; }
+#final-accuracy { font-size: 4em; font-weight: bold; color: #4b8134; margin-top: 10px; }
+.score-display { margin-top: 20px; font-size: 1.1em; font-weight: bold; }
+#final-score { font-size: 1.4em; font-weight: bold; color: #4b8134; display: inline-block; margin-left: 5px; }
+.result-buttons { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+
 #hof-popup-overlay { background-color: rgba(0, 0, 0, 0.2); }
 .popup-hof { max-width: 700px; }
 .hof-input-group { margin: 20px 0; }
-.hof-input-group input {
-    font-family: 'Gowun Dodum', sans-serif;
-    font-size: 18px;
-    padding: 8px;
-    width: 80px;
-    text-align: center;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-right: 10px;
-    text-transform: uppercase;
-}
-.hof-columns {
-    display: flex;
-    gap: 20px;
-    width: 100%;
-}
-.hof-column {
-    flex: 1;
-}
-.hof-column h3 {
-    margin-top: 0;
-}
+.hof-input-group input { font-family: 'Gowun Dodum', sans-serif; font-size: 18px; padding: 8px; width: 80px; text-align: center; border: 1px solid #ccc; border-radius: 4px; margin-right: 10px; text-transform: uppercase; }
+.hof-columns { display: flex; gap: 20px; width: 100%; }
+.hof-column { flex: 1; }
+.hof-column h3 { margin-top: 0; }
 .hof-table-container { max-height: 300px; overflow-y: auto; margin-top: 20px;}
 #hof-table-classic, #hof-table-timeattack { width: 100%; border-collapse: collapse; }
-#hof-table-classic th, #hof-table-classic td,
-#hof-table-timeattack th, #hof-table-timeattack td { padding: 8px; border-bottom: 1px solid #eee; }
+#hof-table-classic th, #hof-table-classic td, #hof-table-timeattack th, #hof-table-timeattack td { padding: 8px; border-bottom: 1px solid #eee; }
 #hof-table-classic th, #hof-table-timeattack th { background-color: #f8f9fa; }
-.confirm-clear-popup p {
-    font-size: 1.1em;
-    margin-bottom: 25px;
-    line-height: 1.6;
+
+.confirm-clear-popup p { font-size: 1.1em; margin-bottom: 25px; line-height: 1.6; }
+.confirm-buttons { display: flex; justify-content: center; gap: 15px; width: 100%; }
+.confirm-buttons button { padding: 10px 30px; font-weight: bold; }
+#confirm-clear-yes-btn { background-color: #e06666; color: white; }
+#confirm-clear-yes-btn:hover { background-color: #cc4125; }
+
+/* 추가된 QR 풀스크린 스타일 */
+#qr-fullscreen { 
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+    background: rgba(0,0,0,0.9); display: none; justify-content: center; 
+    align-items: center; z-index: 10000; cursor: pointer; 
+    flex-direction: column; gap: 20px; 
 }
-.confirm-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    width: 100%;
+#qr-fullscreen img { 
+    width: 60vh; max-width: 80vw; background: #fff; 
+    padding: 20px; border-radius: 20px; 
 }
-.confirm-buttons button {
-    padding: 10px 30px;
-    font-weight: bold;
-}
-#confirm-clear-yes-btn {
-    background-color: #e06666;
-    color: white;
-}
-#confirm-clear-yes-btn:hover {
-    background-color: #cc4125;
-}
+
 .mobile-title, .mobile-home { display: none; }
 @media (max-width: 768px) {
     .main-layout { flex-direction: column; }
-    .left-panel {
-        flex-direction: row;
-        gap: 10px;
-        margin-top: 0;
-    }
-    .right-panel {
-        width: 100%;
-        margin-top: 20px;
-    }
+    .left-panel { flex-direction: row; gap: 10px; margin-top: 0; }
+    .right-panel { width: 100%; margin-top: 20px; }
     .option-buttons { flex-direction: column; }
-    .problem-footer { justify-content: center; }
     .final-result-layout { flex-direction: column; }
     .result-left { border-right: none; border-bottom: 1px solid #ddd; width: 100%; }
     .hof-columns { flex-direction: column; }
 }
 @media (max-width: 480px) {
-    .container {
-        padding: 15px;
-    }
+    .container { padding: 15px; }
     h1 { font-size: 1.6em; }
     h2 { font-size: 1.2em; }
     small { font-size: 16px; line-height: 1.4; }
-    #mode-selection-page h1,
-    #setup-page h1 {
-        padding-top: 30px;
-        margin-bottom: 10px;
-    }
-    #mode-selection-page {
-        gap: 10px;
-    }
-    #mode-selection-page h2 {
-        margin-bottom: 10px;
-    }
-    .mode-buttons {
-        margin-top: 10px;
-    }
-    .mode-buttons button {
-        padding: 15px 10px;
-        font-size: 1.3em;
-        line-height: 1.3;
-    }
-    .mode-buttons button span {
-        display: block;
-    }
-    .mode-description {
-        font-size: 14px;
-    }
+    #mode-selection-page h1, #setup-page h1 { padding-top: 30px; margin-bottom: 10px; }
+    #mode-selection-page { gap: 10px; }
+    #mode-selection-page h2 { margin-bottom: 10px; }
+    .mode-buttons { margin-top: 10px; }
+    .mode-buttons button { padding: 15px 10px; font-size: 1.3em; line-height: 1.3; }
+    .mode-buttons button span { display: block; }
+    .mode-description { font-size: 14px; }
     .desktop-title { display: none; }
     .mobile-title { display: inline; }
     .desktop-home { display: none; }
     .mobile-home { display: inline; }
     .home-button { padding: 8px 10px; }
-    #back-to-mode-select-btn {
-        top: 10px !important;
-        left: 10px !important;
-    }
+    #back-to-mode-select-btn { top: 10px !important; left: 10px !important; }
 }
 </style>
 </head>
 <body>
 
 <div class="container">
-    <button id="qr-code-btn" class="secondary-btn">QR 코드</button>
+    <button id="teacher-settings-btn" class="secondary-btn" onclick="document.getElementById('teacher-settings-overlay').style.display='flex'" style="position: absolute; top: 15px; left: 15px; font-size: 20px; z-index: 20; background: none; border: none;">⚙️ 설정</button>
+    
+    <button id="qr-code-btn" style="display:none !important;"></button>
     
     <div id="mode-selection-page">
         <h1>
@@ -728,15 +215,11 @@ button:hover {
         <div class="mode-buttons">
             <div class="mode-option">
                 <button id="classic-mode-btn">🎓 클래식 <span>모드</span></button>
-                <small class="mode-description">
-                    무작위로 생성되는 문제를<br>원하는 만큼 연습하세요!
-                </small>
+                <small class="mode-description">무작위로 생성되는 문제를<br>원하는 만큼 연습하세요!</small>
             </div>
             <div class="mode-option">
                 <button id="time-attack-mode-btn">⏱️ 타임어택 <span>모드</span></button>
-                <small class="mode-description">
-                    정해진 시간 동안<br>빠르고 정확하게!
-                </small>
+                <small class="mode-description">정해진 시간 동안<br>빠르고 정확하게!</small>
             </div>
         </div>
     </div>
@@ -747,6 +230,12 @@ button:hover {
             <span class="desktop-title">선대칭/점대칭도형 완전 정복</span>
             <span class="mobile-title">선대칭/점대칭도형<br>완전 정복</span>
         </h1>
+        
+        <div class="setting-group" style="margin: 10px auto 20px auto; max-width: 300px; padding: 15px; border-color: #a0c179; border-width: 2px;">
+            <h3 style="margin-top: 0; color: #4b8134;">번호나 별명</h3>
+            <input type="text" id="player-name" placeholder="입력하세요" maxlength="10" style="padding: 10px; font-size: 16px; width: 80%; text-align: center; border: 1px solid #ccc; border-radius: 8px; font-family: 'Gowun Dodum', sans-serif;">
+        </div>
+
         <h2 style="text-align: center;">문제 유형 및 설정</h2>
 
         <div class="main-layout">
@@ -851,6 +340,7 @@ button:hover {
             </div>
         </div>
         <div class="result-buttons">
+            <button id="submit-to-teacher-btn" class="primary-btn" style="display: none; background-color: #ff6b81; border-color: #ff6b81;">선생님께 제출하기 📝</button>
             <button id="restart-btn" class="primary-btn">새로운 학습 시작하기</button>
             <button id="show-hof-btn" class="secondary-btn">명예의 전당 등록하기</button>
         </div>
@@ -871,12 +361,7 @@ button:hover {
     </div>
 </div>
 
-<div id="qr-popup-overlay" class="popup-overlay" style="display: none;">
-    <div class="popup-qr popup-box">
-        <button class="close-btn" onclick="closeQrPopup()">&times;</button>
-        <img src="https://i.imgur.com/B1jg6oE.png" alt="QR Code">
-    </div>
-</div>
+<div id="qr-popup-overlay" style="display:none !important;"></div>
 
 <div id="hof-popup-overlay" class="popup-overlay" style="display: none;">
     <div class="popup-hof popup-box">
@@ -895,15 +380,8 @@ button:hover {
                 <h3>🎓 클래식 모드</h3>
                 <div class="hof-table-container">
                     <table id="hof-table-classic">
-                        <thead>
-                            <tr>
-                                <th>순위</th>
-                                <th>이니셜</th>
-                                <th>점수</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
+                        <thead><tr><th>순위</th><th>이니셜</th><th>점수</th></tr></thead>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>
@@ -911,21 +389,15 @@ button:hover {
                 <h3>⏱️ 타임어택 모드</h3>
                 <div class="hof-table-container">
                     <table id="hof-table-timeattack">
-                        <thead>
-                            <tr>
-                                <th>순위</th>
-                                <th>이니셜</th>
-                                <th>점수</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
+                        <thead><tr><th>순위</th><th>이니셜</th><th>점수</th></tr></thead>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <div id="confirm-clear-popup-overlay" class="popup-overlay" style="display: none; background-color: rgba(255, 255, 255, 0.8);">
     <div class="popup-box confirm-clear-popup">
         <p>표시한 점과 선분을 모두 지웁니다. <br> 계속할까요?</p>
@@ -936,10 +408,50 @@ button:hover {
     </div>
 </div>
 
+<div id="teacher-settings-overlay" class="popup-overlay" style="display: none; z-index: 9999; background-color: rgba(0,0,0,0.7);">
+    <div class="popup-box" style="border: 4px solid #a0c179; padding: 30px; max-width: 450px; width: 90%;">
+        <button class="close-btn" onclick="document.getElementById('teacher-settings-overlay').style.display='none'">&times;</button>
+        <h2 style="margin-top:0; color:#4b8134;">교사 설정 (QR 생성)</h2>
+        
+        <div id="settings-input-area" style="display: flex; flex-direction: column; width: 100%;">
+            <p style="font-size: 14px; color: #555; margin-bottom: 10px; word-break: keep-all;">
+                구글 시트 주소를 넣으면 결과가 전송되는 연동 QR이 만들어집니다. 빈칸으로 두시면 <b>결과 전송이 없는 '일반 플레이 QR'</b>이 생성됩니다.
+            </p>
+
+            <details style="margin-bottom: 15px; text-align: left; background: #f8f9fa; border: 1px solid #ddd; border-radius: 8px; padding: 10px;">
+                <summary style="cursor: pointer; font-size: 14px; font-weight: bold; color: #4b8134; outline: none;">💡 스프레드시트 연동 방법 보기 (클릭)</summary>
+                <div style="font-size: 13px; color: #555; margin-top: 10px; line-height: 1.6; border-top: 1px dashed #ccc; padding-top: 10px;">
+                    1. <a href="https://sheets.new/" target="_blank" style="color: #007bff; text-decoration: underline; font-weight: bold;">새 구글 스프레드시트</a>를 만듭니다.<br>
+                    2. 우측 상단 <b>[공유]</b> 버튼을 누릅니다.<br>
+                    3. 일반 액세스를 <b>'링크가 있는 모든 사용자'</b>, 권한을 <b>'편집자'</b>로 바꿉니다. (중요⭐)<br>
+                    4. 복사한 링크를 아래 빈칸에 붙여넣으세요!
+                </div>
+            </details>
+
+            <input type="text" id="sheet-url-input" placeholder="https://docs.google.com/spreadsheets/d/..." style="width: 100%; box-sizing: border-box; padding: 12px; margin-bottom: 15px; border: 2px solid #ccc; border-radius: 8px; font-size: 14px; font-family: 'Gowun Dodum', sans-serif;">
+            <button class="primary-btn" onclick="generateTeacherQR()" style="width: 100%; font-size: 1.1em; padding: 15px;">QR코드 생성하기</button>
+        </div>
+
+        <div id="qr-display-area" style="display: none; flex-direction: column; align-items: center; margin-top: 10px;">
+            <p id="qr-status-msg" style="font-size: 18px; font-weight:bold; color: #ffc107; margin: 0 0 15px 0;">✨ 설정 완료!</p>
+            <img id="teacher-qr-img" src="" alt="접속 QR" onclick="showFullscreenQR()" style="max-width: 200px; border: 5px solid #a0c179; border-radius: 10px; cursor: pointer; padding: 5px; background: white;">
+            <p style="font-size: 14px; color: #666; margin-top: 15px; margin-bottom: 0;">QR 코드를 화면에 띄워주세요.<br>(클릭 시 화면이 확대됩니다)</p>
+            <button class="secondary-btn" onclick="resetTeacherSettings()" style="width: 100%; margin-top: 15px;">다시 설정하기</button>
+        </div>
+    </div>
+</div>
+
+<div id="qr-fullscreen" onclick="this.style.display='none'">
+    <h2 style="color:white; margin:0; font-family: 'Gowun Dodum', sans-serif;">태블릿으로 스캔하세요!</h2>
+    <img id="qr-large-img" src="" alt="QR">
+    <p style="color:#aaa; font-size:1.2rem; font-family: 'Gowun Dodum', sans-serif;">(화면을 터치하면 닫힙니다)</p>
+</div>
+
 <script>
     const webAppUrl = 'https://patient-thunder-7347.bbglara.workers.dev/';
     const blockedWords = ['SEX', 'FUK', 'KIN', 'GAY', 'FUC', 'ASS', 'FUX', 'WTF']; 
 const _0x1ac04e=_0x3dfa;(function(_0x17613f,_0x4a1509){const _0x3b5a83=_0x3dfa,_0x4fad73=_0x17613f();while(!![]){try{const _0x1bc05c=-parseInt(_0x3b5a83(0x202))/0x1*(parseInt(_0x3b5a83(0x289))/0x2)+-parseInt(_0x3b5a83(0x275))/0x3*(-parseInt(_0x3b5a83(0x297))/0x4)+-parseInt(_0x3b5a83(0x2c7))/0x5*(-parseInt(_0x3b5a83(0x1ec))/0x6)+-parseInt(_0x3b5a83(0x211))/0x7+parseInt(_0x3b5a83(0x26a))/0x8*(parseInt(_0x3b5a83(0x271))/0x9)+-parseInt(_0x3b5a83(0x292))/0xa*(-parseInt(_0x3b5a83(0x235))/0xb)+-parseInt(_0x3b5a83(0x2e0))/0xc;if(_0x1bc05c===_0x4a1509)break;else _0x4fad73['push'](_0x4fad73['shift']());}catch(_0x1d7b81){_0x4fad73['push'](_0x4fad73['shift']());}}}(_0x4bd1,0xc3003));const timeOptions=[0x3,0x5,0x7];let selectedType=_0x1ac04e(0x284),totalProblems=0x5,currentProblem=0x0,canvasMode=_0x1ac04e(0x2a7),score={'results':[]},currentProblemAttempts=0x0,selectedDifficulty='1',finalAccuracyValue=0x0,finalScoreValue=0x0,hasSubmittedScore=![],isExitingIntentionally=![],gameMode=_0x1ac04e(0x1ff),timeLimitInMinutes=0x3,remainingTime=0x0,timerInterval=null;function _0x3dfa(_0x368bad,_0x4fe365){const _0x4bd127=_0x4bd1();return _0x3dfa=function(_0x3dfad0,_0x43ec3a){_0x3dfad0=_0x3dfad0-0x1e8;let _0x3bb30c=_0x4bd127[_0x3dfad0];return _0x3bb30c;},_0x3dfa(_0x368bad,_0x4fe365);}const canvas=document[_0x1ac04e(0x2ca)]('grid-canvas'),ctx=canvas[_0x1ac04e(0x29b)]('2d'),canvasWrapper=document[_0x1ac04e(0x24c)](_0x1ac04e(0x248));let GRID_SIZE,GRID_COUNT,HALF_COUNT,CENTER_POINT,MIN_COORD,MAX_COORD;const COLLINEARITY_THRESHOLD=0x1,MIN_ANGLE_COSINE=Math[_0x1ac04e(0x27f)](0x1e*Math['PI']/0xb4),MAX_ANGLE_COSINE=Math['cos'](0x96*Math['PI']/0xb4),MIN_SLOPE_DIFF=0x2,MIN_DIST=0x2;let problemVertices=[],problemLines=[],userVertices=[],userLines=[],tempLineStart=null,hoveredLine=null,problemList=[];function setupGrid(){const _0x46e021=_0x1ac04e;GRID_COUNT=0x10,MIN_COORD=0x2,MAX_COORD=0xe,GRID_SIZE=canvas[_0x46e021(0x25a)]/GRID_COUNT,HALF_COUNT=GRID_COUNT/0x2,CENTER_POINT={'x':HALF_COUNT,'y':HALF_COUNT};}const allPages=[_0x1ac04e(0x251),_0x1ac04e(0x2a2),_0x1ac04e(0x1f2),'final-result-page'];function showPage(_0x4e9df3){const _0x432a69=_0x1ac04e;allPages[_0x432a69(0x2b7)](_0xe1800=>{const _0x13afa0=_0x432a69,_0x5c64d7=document[_0x13afa0(0x2ca)](_0xe1800);_0x5c64d7&&(_0x5c64d7[_0x13afa0(0x2b8)][_0x13afa0(0x252)]=_0x13afa0(0x274));});const _0x1312e9=document[_0x432a69(0x2ca)](_0x4e9df3);if(_0x1312e9){const _0x394c06=_0x4e9df3===_0x432a69(0x251)||_0x4e9df3===_0x432a69(0x2a2)?_0x432a69(0x25e):_0x432a69(0x1ee);_0x1312e9[_0x432a69(0x2b8)][_0x432a69(0x252)]=_0x394c06;}const _0x2b1b9b=document[_0x432a69(0x2ca)](_0x432a69(0x25b));_0x2b1b9b&&(_0x2b1b9b[_0x432a69(0x2b8)][_0x432a69(0x252)]=_0x4e9df3==='mode-selection-page'||_0x4e9df3===_0x432a69(0x2a2)?_0x432a69(0x1ee):_0x432a69(0x274));}function resetGame(){const _0x32a04a=_0x1ac04e;stopTimer(),clearGameState(),isExitingIntentionally=![],selectedType=_0x32a04a(0x284),totalProblems=0x5,currentProblem=0x0,canvasMode=_0x32a04a(0x2a7),score={'results':[]},currentProblemAttempts=0x0,selectedDifficulty='1',hasSubmittedScore=![],gameMode=_0x32a04a(0x1ff),timeLimitInMinutes=0x3,remainingTime=0x0,problemList=[],userVertices=[],userLines=[],document['getElementById'](_0x32a04a(0x1ea))[_0x32a04a(0x262)]='5',document[_0x32a04a(0x2ca)](_0x32a04a(0x268))[_0x32a04a(0x262)]='3분',document[_0x32a04a(0x2ca)](_0x32a04a(0x240))['style']['display']=_0x32a04a(0x274),document[_0x32a04a(0x2ca)]('problem-counter-display')[_0x32a04a(0x2b8)][_0x32a04a(0x252)]=_0x32a04a(0x274),document['querySelectorAll'](_0x32a04a(0x208))[_0x32a04a(0x2b7)](_0x1706f3=>_0x1706f3[_0x32a04a(0x22e)][_0x32a04a(0x2e7)](_0x32a04a(0x2c5))),document[_0x32a04a(0x24c)]('#type-select\x20button[data-type=\x22line\x22]')[_0x32a04a(0x22e)][_0x32a04a(0x21e)](_0x32a04a(0x2c5)),document['querySelectorAll']('#difficulty-select\x20button')[_0x32a04a(0x2b7)](_0xf70440=>_0xf70440[_0x32a04a(0x22e)]['remove'](_0x32a04a(0x2c5))),document[_0x32a04a(0x24c)]('#difficulty-select\x20button[data-difficulty=\x221\x22]')[_0x32a04a(0x22e)]['add'](_0x32a04a(0x2c5)),setupGrid(),document[_0x32a04a(0x2ca)](_0x32a04a(0x1f3))[_0x32a04a(0x2b8)][_0x32a04a(0x252)]=_0x32a04a(0x1ee),document[_0x32a04a(0x2ca)](_0x32a04a(0x22f))[_0x32a04a(0x2b8)]['display']='none',updateSettingsOverlay();}function isSamePoint(_0x4c256e,_0x58e135){if(!_0x4c256e||!_0x58e135)return![];return _0x4c256e['x']===_0x58e135['x']&&_0x4c256e['y']===_0x58e135['y'];}function isSameLine(_0x2cdcb3,_0x5d2251){if(!_0x2cdcb3||!_0x5d2251)return![];const _0x453127=_0x2cdcb3['p1'],_0x13845c=_0x2cdcb3['p2'],_0x53d47a=_0x5d2251['p1'],_0x152bb2=_0x5d2251['p2'];return isSamePoint(_0x453127,_0x53d47a)&&isSamePoint(_0x13845c,_0x152bb2)||isSamePoint(_0x453127,_0x152bb2)&&isSamePoint(_0x13845c,_0x53d47a);}function isLineExists(_0xac43a7){const _0x40ea2b=_0x1ac04e;return userLines[_0x40ea2b(0x1eb)](_0x191ff3=>isSameLine(_0x191ff3,_0xac43a7));}function getRandomInt(_0x7950c8,_0x2deb31){const _0x490486=_0x1ac04e;return _0x7950c8=Math['ceil'](_0x7950c8),_0x2deb31=Math['floor'](_0x2deb31),Math[_0x490486(0x2e1)](Math[_0x490486(0x265)]()*(_0x2deb31-_0x7950c8+0x1))+_0x7950c8;}function isTooClose(_0x1b200f,_0x53b74a,_0x319db8=MIN_DIST){const _0x1ae7f2=_0x319db8**0x2;for(const _0x3dd2b1 of _0x53b74a){const _0x11a5f6=(_0x1b200f['x']-_0x3dd2b1['x'])**0x2+(_0x1b200f['y']-_0x3dd2b1['y'])**0x2;if(_0x11a5f6<_0x1ae7f2)return!![];}return![];}function isTooLinear(_0x2d43c2,_0x17dfd2,_0x71ab0){const _0x204170=_0x1ac04e,_0x39289d=(_0x17dfd2['y']-_0x2d43c2['y'])*(_0x71ab0['x']-_0x17dfd2['x'])-(_0x71ab0['y']-_0x17dfd2['y'])*(_0x17dfd2['x']-_0x2d43c2['x']);return Math[_0x204170(0x250)](_0x39289d)<COLLINEARITY_THRESHOLD;}function isTooSharpAngle(_0x43214d,_0x40f624,_0x1a395d){const _0x75abd7=_0x1ac04e,_0x48d62c=_0x43214d['x']-_0x40f624['x'],_0x28ee22=_0x43214d['y']-_0x40f624['y'],_0x37179f=_0x1a395d['x']-_0x40f624['x'],_0x5b2a71=_0x1a395d['y']-_0x40f624['y'],_0xa8a55c=_0x48d62c*_0x37179f+_0x28ee22*_0x5b2a71,_0x2729ef=Math[_0x75abd7(0x20d)](_0x48d62c*_0x48d62c+_0x28ee22*_0x28ee22),_0x165882=Math['sqrt'](_0x37179f*_0x37179f+_0x5b2a71*_0x5b2a71);if(_0x2729ef===0x0||_0x165882===0x0)return!![];const _0x28d9d4=_0xa8a55c/(_0x2729ef*_0x165882);return _0x28d9d4>MIN_ANGLE_COSINE||_0x28d9d4<MAX_ANGLE_COSINE;}function isTooWeakSlope(_0x1ea11e,_0x10a089){const _0x25aca9=_0x1ac04e,_0x1369eb=Math[_0x25aca9(0x250)](_0x10a089['x']-_0x1ea11e['x']),_0x429433=Math[_0x25aca9(0x250)](_0x10a089['y']-_0x1ea11e['y']);return _0x1369eb<=MIN_SLOPE_DIFF||_0x429433<=MIN_SLOPE_DIFF||_0x1369eb>0x0&&_0x429433>0x0&&Math[_0x25aca9(0x250)](_0x429433/_0x1369eb)<0x1;}function isProblemTooLinear(_0x30be99,_0x542576){const _0x1b4f4d=_0x1ac04e;if(_0x30be99['length']<0x2)return![];const _0x45d027=_0x30be99[_0x30be99['length']-0x2],_0x216ba6=_0x30be99[_0x30be99[_0x1b4f4d(0x2aa)]-0x1];for(let _0x2ef382=0x0;_0x2ef382<_0x30be99[_0x1b4f4d(0x2aa)]-0x1;_0x2ef382++)if(isTooLinear(_0x30be99[_0x2ef382],_0x216ba6,_0x542576))return!![];return isTooLinear(_0x45d027,_0x216ba6,_0x542576);}function isProblemTooSharp(_0x489def,_0xb1cc52){const _0x2a9cca=_0x1ac04e;if(_0x489def[_0x2a9cca(0x2aa)]<0x2)return![];const _0x9c74e7=_0x489def[_0x489def[_0x2a9cca(0x2aa)]-0x2],_0x5ab611=_0x489def[_0x489def[_0x2a9cca(0x2aa)]-0x1],_0x3c522b=_0x1e1036=>_0x1e1036['x']===HALF_COUNT||_0x1e1036['y']===HALF_COUNT||_0x1e1036['x']===_0x1e1036['y'];if(_0x3c522b(_0x9c74e7)&&_0x3c522b(_0x5ab611)&&_0x3c522b(_0xb1cc52))return![];for(let _0x3bc226=0x1;_0x3bc226<_0x489def[_0x2a9cca(0x2aa)];_0x3bc226++)if(isTooSharpAngle(_0x489def[_0x3bc226-0x1],_0x489def[_0x3bc226],_0xb1cc52))return!![];return isTooSharpAngle(_0x9c74e7,_0x5ab611,_0xb1cc52);}function distSq(_0x38debb,_0x3e2f22){return(_0x38debb['x']-_0x3e2f22['x'])**0x2+(_0x38debb['y']-_0x3e2f22['y'])**0x2;}function calculateSymmetricPoint(_0x330c68,_0x4bb8bc,_0x614874=![],_0xa5d1ab=_0x1ac04e(0x210)){const _0x10dff8=_0x1ac04e;let _0x591217,_0x916ac2;const _0x2ad381=HALF_COUNT;if(_0x4bb8bc===_0x10dff8(0x284)){if(_0x614874)_0x591217=_0x330c68['y'],_0x916ac2=_0x330c68['x'];else _0xa5d1ab===_0x10dff8(0x224)?(_0x591217=_0x330c68['x'],_0x916ac2=0x2*_0x2ad381-_0x330c68['y']):(_0x591217=0x2*_0x2ad381-_0x330c68['x'],_0x916ac2=_0x330c68['y']);}else{if(_0x4bb8bc===_0x10dff8(0x205))_0x591217=0x2*_0x2ad381-_0x330c68['x'],_0x916ac2=0x2*_0x2ad381-_0x330c68['y'];else return _0x330c68;}return{'x':Math[_0x10dff8(0x2cb)](_0x591217),'y':Math[_0x10dff8(0x2cb)](_0x916ac2)};}function createSequentialLines(_0x436bac,_0x596978=![]){const _0x2fda37=_0x1ac04e,_0x1bd845=[];if(_0x436bac['length']<0x2)return _0x1bd845;const _0x2d7ca5=_0x436bac[_0x2fda37(0x2aa)];for(let _0x1fc876=0x0;_0x1fc876<_0x2d7ca5;_0x1fc876++){const _0x1db5a2=_0x436bac[_0x1fc876],_0x3292fc=_0x436bac[(_0x1fc876+0x1)%_0x2d7ca5];if(!_0x596978&&_0x1fc876===_0x2d7ca5-0x1)break;_0x1bd845['push']({'p1':_0x1db5a2,'p2':_0x3292fc});}return _0x1bd845;}function findPointSymmetricBoundary(_0x597e62){const _0x1cbecb=_0x1ac04e;if(_0x597e62['length']<0x3)return _0x597e62;const _0x3d0dc8=CENTER_POINT,_0x5635b8=_0x597e62['find'](_0x2f683f=>isSamePoint(_0x2f683f,_0x3d0dc8)),_0x46552f=_0x597e62[_0x1cbecb(0x2de)](_0x10c2f5=>!isSamePoint(_0x10c2f5,_0x3d0dc8));_0x46552f[_0x1cbecb(0x1e8)]((_0x11fb69,_0x1da571)=>Math[_0x1cbecb(0x2b2)](_0x11fb69['y']-_0x3d0dc8['y'],_0x11fb69['x']-_0x3d0dc8['x'])-Math['atan2'](_0x1da571['y']-_0x3d0dc8['y'],_0x1da571['x']-_0x3d0dc8['x']));let _0x3ac7cc=[];if(_0x5635b8)_0x3ac7cc['push'](_0x5635b8);return _0x3ac7cc=_0x3ac7cc[_0x1cbecb(0x22a)](_0x46552f),_0x3ac7cc['filter']((_0x19c540,_0x5a1147,_0xee57ab)=>_0x5a1147===_0xee57ab[_0x1cbecb(0x245)](_0x3eb05f=>isSamePoint(_0x3eb05f,_0x19c540)));}function sortSlantedAxisVertices(_0x29bddc){const _0x2d4dab=_0x1ac04e,_0x5cb6e7=_0x29bddc['filter'](_0x2a1c6f=>_0x2a1c6f['x']===_0x2a1c6f['y'])['sort']((_0x531847,_0x284fe6)=>_0x531847['y']-_0x284fe6['y']),_0x52e127=_0x29bddc[_0x2d4dab(0x2de)](_0x6dccd6=>_0x6dccd6['x']!==_0x6dccd6['y']),_0x8d5601=_0x5cb6e7[0x0],_0x423b10=_0x5cb6e7[0x1],_0x209f53=_0x52e127[_0x2d4dab(0x2de)](_0x7f8360=>_0x7f8360['y']<_0x7f8360['x']),_0xff2c71=_0x52e127[_0x2d4dab(0x2de)](_0x70f924=>_0x70f924['y']>_0x70f924['x']);return _0x209f53[_0x2d4dab(0x1e8)]((_0xe20b1e,_0x6b634e)=>Math['atan2'](_0xe20b1e['y']-_0x8d5601['y'],_0xe20b1e['x']-_0x8d5601['x'])-Math[_0x2d4dab(0x2b2)](_0x6b634e['y']-_0x8d5601['y'],_0x6b634e['x']-_0x8d5601['x'])),_0xff2c71['sort']((_0x5774cc,_0x3069d8)=>Math['atan2'](_0x3069d8['y']-_0x423b10['y'],_0x3069d8['x']-_0x423b10['x'])-Math[_0x2d4dab(0x2b2)](_0x5774cc['y']-_0x423b10['y'],_0x5774cc['x']-_0x423b10['x'])),[_0x8d5601,..._0x209f53,_0x423b10,..._0xff2c71];}function generateRandomProblem(_0x4445fd,_0x459342=null){const _0x1f8567=_0x1ac04e,_0x5b66cc=0x64;if(_0x4445fd===_0x1f8567(0x284)){let _0x44ebe2,_0x23def6,_0x471bc5,_0x1f9cfe=![],_0x16149e=_0x1f8567(0x210);const _0x643fe5=selectedDifficulty===_0x1f8567(0x29a)?'1':selectedDifficulty;if(_0x459342)_0x44ebe2=_0x459342,_0x23def6=MIN_COORD,_0x471bc5=MAX_COORD,_0x1f9cfe=![],_0x16149e=Math[_0x1f8567(0x265)]()<0.5?_0x1f8567(0x210):_0x1f8567(0x224);else _0x643fe5==0x2?(_0x1f9cfe=Math['random']()<0.5,_0x1f9cfe?(_0x44ebe2=getRandomInt(0x3,0x4),_0x23def6=MIN_COORD,_0x471bc5=MAX_COORD,_0x16149e='slanted'):(_0x44ebe2=getRandomInt(0x5,0x6),_0x23def6=MIN_COORD-0x1,_0x471bc5=MAX_COORD+0x1,_0x16149e=Math['random']()<0.5?_0x1f8567(0x210):_0x1f8567(0x224))):(_0x1f9cfe=![],_0x44ebe2=0x4,_0x23def6=MIN_COORD,_0x471bc5=MAX_COORD,_0x16149e=Math[_0x1f8567(0x265)]()<0.5?_0x1f8567(0x210):_0x1f8567(0x224));if(_0x1f9cfe){const _0xb29740={'x':HALF_COUNT,'y':HALF_COUNT},_0x497cb1=getRandomInt(Math['floor'](GRID_COUNT*0.15),Math[_0x1f8567(0x2e1)](GRID_COUNT*0.35)),_0x3740b7={'x':_0xb29740['x']-_0x497cb1,'y':_0xb29740['y']-_0x497cb1},_0x1edbb1={'x':_0xb29740['x']+_0x497cb1,'y':_0xb29740['y']+_0x497cb1};let _0x4bdf90=[_0x3740b7];for(let _0x28a8f7=0x0;_0x28a8f7<_0x44ebe2-0x2;_0x28a8f7++){let _0x5e550c,_0x5efd98=![],_0x3c5d03=0x0;while(!_0x5efd98&&_0x3c5d03<_0x5b66cc){let _0x4372b9=getRandomInt(_0x23def6,_0x471bc5),_0x529b95=getRandomInt(_0x23def6,_0x4372b9-0x1);_0x5e550c={'x':_0x4372b9,'y':_0x529b95};let _0x2a8e25=!![];_0x4bdf90[_0x1f8567(0x2aa)]>=0x2&&(isTooSharpAngle(_0x4bdf90[_0x4bdf90[_0x1f8567(0x2aa)]-0x2],_0x4bdf90[_0x4bdf90[_0x1f8567(0x2aa)]-0x1],_0x5e550c)&&(_0x2a8e25=![]));if(_0x4bdf90[_0x1f8567(0x2aa)]>0x0){let _0x444297=calculateSymmetricPoint(_0x5e550c,'line',!![]);isTooSharpAngle(_0x4bdf90[_0x4bdf90[_0x1f8567(0x2aa)]-0x1],_0x5e550c,_0x444297)&&(_0x2a8e25=![]);}_0x2a8e25&&!isTooClose(_0x5e550c,_0x4bdf90)&&!isProblemTooLinear(_0x4bdf90,_0x5e550c)&&(_0x4bdf90[_0x1f8567(0x259)](_0x5e550c),_0x5efd98=!![]),_0x3c5d03++;}if(!_0x5efd98)return null;}_0x4bdf90[_0x1f8567(0x259)](_0x1edbb1);let _0x383191=[..._0x4bdf90];if(_0x383191[_0x1f8567(0x2aa)]<0x3)return null;if(isTooLinear(_0x383191[_0x383191[_0x1f8567(0x2aa)]-0x2],_0x383191[_0x383191[_0x1f8567(0x2aa)]-0x1],_0x383191[0x0])||isTooSharpAngle(_0x383191[_0x383191[_0x1f8567(0x2aa)]-0x2],_0x383191[_0x383191[_0x1f8567(0x2aa)]-0x1],_0x383191[0x0]))return null;let _0x2a3949=sortSlantedAxisVertices(_0x383191);if(_0x2a3949[_0x1f8567(0x2aa)]>=0x3)for(let _0x1ffb06=0x0;_0x1ffb06<_0x2a3949['length']-0x2;_0x1ffb06++){if(isTooLinear(_0x2a3949[_0x1ffb06],_0x2a3949[_0x1ffb06+0x1],_0x2a3949[_0x1ffb06+0x2]))return null;}const _0x226cde=createSequentialLines(_0x2a3949,![]),_0x93468b=_0x226cde['filter'](_0x5e3630=>(_0x5e3630['p1']['x']+_0x5e3630['p2']['x'])/0x2>(_0x5e3630['p1']['y']+_0x5e3630['p2']['y'])/0x2);let _0x1b84a6=_0x93468b[_0x1f8567(0x23b)]((_0x5efcf6,_0x5f0a1e)=>{const _0x220b58=_0x1f8567;if(!_0x5efcf6[_0x220b58(0x1eb)](_0x28b547=>isSamePoint(_0x28b547,_0x5f0a1e['p1'])))_0x5efcf6[_0x220b58(0x259)](_0x5f0a1e['p1']);if(!_0x5efcf6[_0x220b58(0x1eb)](_0x3a64ee=>isSamePoint(_0x3a64ee,_0x5f0a1e['p2'])))_0x5efcf6['push'](_0x5f0a1e['p2']);return _0x5efcf6;},[]);if(_0x1b84a6['filter'](_0x47e641=>_0x47e641['x']===_0x47e641['y'])['length']<0x2)return null;return{'type':_0x1f8567(0x284),'isSlantedAxis':!![],'axisDirection':_0x1f8567(0x258),'initialVertices':_0x1b84a6,'initialLines':_0x93468b,'allVertices':_0x2a3949,'allLines':_0x226cde};}else{let _0x167c7d;if(_0x16149e==='vertical'){const _0x31b1ac={'x':HALF_COUNT,'y':getRandomInt(_0x23def6,HALF_COUNT-0x2)},_0x302b16={'x':HALF_COUNT,'y':getRandomInt(HALF_COUNT+0x2,_0x471bc5)};let _0x4ca0d0=[];for(let _0x512a84=0x0;_0x512a84<_0x44ebe2-0x2;_0x512a84++){let _0x27abfe,_0x90abd4=![],_0x468439=0x0;while(!_0x90abd4&&_0x468439<_0x5b66cc){_0x27abfe={'x':getRandomInt(_0x23def6,HALF_COUNT-0x1),'y':getRandomInt(_0x31b1ac['y'],_0x302b16['y'])};let _0x1e44f4=!isTooClose(_0x27abfe,[..._0x4ca0d0,_0x31b1ac,_0x302b16]);_0x4ca0d0[_0x1f8567(0x2aa)]>0x0&&isTooWeakSlope(_0x4ca0d0[_0x4ca0d0[_0x1f8567(0x2aa)]-0x1],_0x27abfe)&&(_0x1e44f4=![]),_0x1e44f4&&(_0x4ca0d0[_0x1f8567(0x259)](_0x27abfe),_0x90abd4=!![]),_0x468439++;}if(!_0x90abd4)return null;}_0x4ca0d0[_0x1f8567(0x1e8)]((_0x66a6c9,_0x1e6c25)=>_0x66a6c9['y']-_0x1e6c25['y']),_0x167c7d=[_0x31b1ac,..._0x4ca0d0,_0x302b16];}else{const _0x324fdf={'x':getRandomInt(_0x23def6,HALF_COUNT-0x2),'y':HALF_COUNT},_0x2d7cea={'x':getRandomInt(HALF_COUNT+0x2,_0x471bc5),'y':HALF_COUNT};let _0x324f26=[];for(let _0x292ea6=0x0;_0x292ea6<_0x44ebe2-0x2;_0x292ea6++){let _0x15ec30,_0x13946b=![],_0x623cf0=0x0;while(!_0x13946b&&_0x623cf0<_0x5b66cc){_0x15ec30={'x':getRandomInt(_0x324fdf['x'],_0x2d7cea['x']),'y':getRandomInt(_0x23def6,HALF_COUNT-0x1)};let _0x600aaf=!isTooClose(_0x15ec30,[..._0x324f26,_0x324fdf,_0x2d7cea]);_0x324f26[_0x1f8567(0x2aa)]>0x0&&isTooWeakSlope(_0x324f26[_0x324f26['length']-0x1],_0x15ec30)&&(_0x600aaf=![]),_0x600aaf&&(_0x324f26['push'](_0x15ec30),_0x13946b=!![]),_0x623cf0++;}if(!_0x13946b)return null;}_0x324f26['sort']((_0x37652d,_0x4c3297)=>_0x37652d['x']-_0x4c3297['x']),_0x167c7d=[_0x324fdf,..._0x324f26,_0x2d7cea];}if(_0x167c7d[_0x1f8567(0x2aa)]<0x2)return null;if(_0x167c7d[_0x1f8567(0x2aa)]>=0x3)for(let _0x1cdd8d=0x0;_0x1cdd8d<_0x167c7d[_0x1f8567(0x2aa)]-0x2;_0x1cdd8d++){if(isTooLinear(_0x167c7d[_0x1cdd8d],_0x167c7d[_0x1cdd8d+0x1],_0x167c7d[_0x1cdd8d+0x2]))return null;}let _0x5cd08a=_0x167c7d['concat'](_0x167c7d[_0x1f8567(0x2c2)](_0x1fa41c=>calculateSymmetricPoint(_0x1fa41c,_0x1f8567(0x284),![],_0x16149e))[_0x1f8567(0x277)]());return _0x5cd08a=_0x5cd08a[_0x1f8567(0x2de)]((_0x53e1c0,_0x1def77,_0x1f1fde)=>_0x1def77===_0x1f1fde['findIndex'](_0x4c58dc=>isSamePoint(_0x4c58dc,_0x53e1c0))),{'type':'line','isSlantedAxis':![],'axisDirection':_0x16149e,'initialVertices':_0x167c7d,'initialLines':createSequentialLines(_0x167c7d,![]),'allVertices':_0x5cd08a,'allLines':createSequentialLines(_0x5cd08a,!![])};}}else{if(_0x4445fd===_0x1f8567(0x205)){const _0x4e4c84=selectedDifficulty===_0x1f8567(0x29a)?'1':selectedDifficulty,_0x52f09e=_0x459342?_0x459342:_0x4e4c84==0x1?0x4:getRandomInt(0x5,0x6);let _0x2dfc67=[];const _0x3ff340=Math[_0x1f8567(0x265)]()<0.5;let _0x5d0bcf,_0x3c5ebb;if(_0x3ff340){const _0x4b1078=CENTER_POINT['y'],_0x2e9f7e=getRandomInt(Math['floor'](GRID_COUNT*0.15),Math[_0x1f8567(0x2e1)](GRID_COUNT*0.35));_0x5d0bcf={'x':CENTER_POINT['x']-_0x2e9f7e,'y':_0x4b1078},_0x3c5ebb={'x':CENTER_POINT['x']+_0x2e9f7e,'y':_0x4b1078};}else{const _0x3eab2e=CENTER_POINT['x'],_0x17e891=getRandomInt(Math['floor'](GRID_COUNT*0.15),Math[_0x1f8567(0x2e1)](GRID_COUNT*0.35));_0x5d0bcf={'x':_0x3eab2e,'y':CENTER_POINT['y']-_0x17e891},_0x3c5ebb={'x':_0x3eab2e,'y':CENTER_POINT['y']+_0x17e891};}_0x2dfc67[_0x1f8567(0x259)](_0x5d0bcf);let _0x3f729c=[];for(let _0x47cecb=0x0;_0x47cecb<_0x52f09e-0x2;_0x47cecb++){let _0x24b5dd,_0x56c377=![],_0xe5025c=0x0;while(!_0x56c377&&_0xe5025c<_0x5b66cc){let _0x1936db,_0x3e84c2;_0x3ff340?(_0x1936db=getRandomInt(MIN_COORD,MAX_COORD),_0x3e84c2=getRandomInt(MIN_COORD,CENTER_POINT['y']-0x1)):(_0x1936db=getRandomInt(MIN_COORD,CENTER_POINT['x']-0x1),_0x3e84c2=getRandomInt(MIN_COORD,MAX_COORD)),_0x24b5dd={'x':_0x1936db,'y':_0x3e84c2},!isTooClose(_0x24b5dd,[..._0x2dfc67,..._0x3f729c])&&(_0x3f729c[_0x1f8567(0x259)](_0x24b5dd),_0x56c377=!![]),_0xe5025c++;}if(!_0x56c377)return null;}_0x3f729c[_0x1f8567(0x1e8)]((_0x2a3c98,_0x4edb7c)=>Math['atan2'](_0x2a3c98['y']-CENTER_POINT['y'],_0x2a3c98['x']-CENTER_POINT['x'])-Math['atan2'](_0x4edb7c['y']-CENTER_POINT['y'],_0x4edb7c['x']-CENTER_POINT['x'])),_0x2dfc67=_0x2dfc67[_0x1f8567(0x22a)](_0x3f729c),_0x2dfc67['push'](_0x3c5ebb);let _0x352c17=[],_0x4200ec=new Set();_0x2dfc67['forEach'](_0x39ea8a=>{const _0x2a91e5=_0x1f8567,_0x5d570a=_0x39ea8a['x']+','+_0x39ea8a['y'];if(!_0x4200ec[_0x2a91e5(0x24a)](_0x5d570a)){_0x352c17['push'](_0x39ea8a),_0x4200ec[_0x2a91e5(0x21e)](_0x5d570a);const _0x2e54b3=calculateSymmetricPoint(_0x39ea8a,_0x2a91e5(0x205)),_0x145124=_0x2e54b3['x']+','+_0x2e54b3['y'];!_0x4200ec[_0x2a91e5(0x24a)](_0x145124)&&(_0x352c17[_0x2a91e5(0x259)](_0x2e54b3),_0x4200ec[_0x2a91e5(0x21e)](_0x145124));}}),_0x352c17=findPointSymmetricBoundary(_0x352c17);if(_0x352c17[_0x1f8567(0x2aa)]>=0x3)for(let _0x5c56fe=0x0;_0x5c56fe<_0x352c17['length'];_0x5c56fe++){const _0x13be33=_0x352c17[_0x1f8567(0x2aa)],_0x42a1f0=_0x352c17[(_0x5c56fe-0x1+_0x13be33)%_0x13be33],_0x2a3132=_0x352c17[_0x5c56fe],_0x38a463=_0x352c17[(_0x5c56fe+0x1)%_0x13be33];if(isTooLinear(_0x42a1f0,_0x2a3132,_0x38a463)||isTooSharpAngle(_0x42a1f0,_0x2a3132,_0x38a463))return null;}const _0xe6dd9c=createSequentialLines(_0x352c17,!![]),_0x5f2288=[],_0xc02197=new Set(_0x2dfc67[_0x1f8567(0x2c2)](_0x3e4d9e=>_0x3e4d9e['x']+','+_0x3e4d9e['y']));return _0xe6dd9c[_0x1f8567(0x2b7)](_0x1af857=>{const _0x1abe1f=_0x1f8567;_0xc02197[_0x1abe1f(0x24a)](_0x1af857['p1']['x']+','+_0x1af857['p1']['y'])&&_0xc02197[_0x1abe1f(0x24a)](_0x1af857['p2']['x']+','+_0x1af857['p2']['y'])&&_0x5f2288[_0x1abe1f(0x259)](_0x1af857);}),{'type':_0x1f8567(0x205),'initialVertices':_0x2dfc67,'initialLines':_0x5f2288,'allVertices':_0x352c17,'allLines':_0xe6dd9c};}}return null;}function initializeSetupListeners(){const _0x1802e6=_0x1ac04e;document['querySelectorAll'](_0x1802e6(0x208))[_0x1802e6(0x2b7)](_0x1157bb=>{const _0x56d304=_0x1802e6;_0x1157bb[_0x56d304(0x2c8)](_0x56d304(0x266),handleTypeSelect);}),document[_0x1802e6(0x207)](_0x1802e6(0x2cd))[_0x1802e6(0x2b7)](_0x335e97=>{const _0x28a1cd=_0x1802e6;_0x335e97['addEventListener'](_0x28a1cd(0x266),handleDifficultySelect);}),document[_0x1802e6(0x2ca)](_0x1802e6(0x280))['addEventListener'](_0x1802e6(0x266),()=>changeQuantity(-0x5)),document[_0x1802e6(0x2ca)](_0x1802e6(0x244))[_0x1802e6(0x2c8)](_0x1802e6(0x266),()=>changeQuantity(0x5)),document[_0x1802e6(0x2ca)](_0x1802e6(0x2d2))['addEventListener']('click',()=>changeTimeLimit(-0x1)),document['getElementById'](_0x1802e6(0x2da))[_0x1802e6(0x2c8)](_0x1802e6(0x266),()=>changeTimeLimit(0x1));}function updateSettingsOverlay(){const _0x159fbc=_0x1ac04e,_0x31d42c=document[_0x159fbc(0x2ca)]('settings-overlay'),_0x1e3932=document[_0x159fbc(0x2ca)]('overlay-message'),_0x1b2fac=selectedDifficulty==='practice';_0x1b2fac?(_0x31d42c[_0x159fbc(0x2b8)][_0x159fbc(0x252)]=_0x159fbc(0x25e),gameMode===_0x159fbc(0x1ff)?_0x1e3932[_0x159fbc(0x2e8)]='문제\x20개수는<br>3개로\x20고정됩니다.':_0x1e3932[_0x159fbc(0x2e8)]='시간은\x202분으로<br>고정됩니다.'):_0x31d42c[_0x159fbc(0x2b8)]['display']=_0x159fbc(0x274);}function selectGameMode(_0x231a8a){const _0x2f64d8=_0x1ac04e;gameMode=_0x231a8a;const _0xfc5a1e=document[_0x2f64d8(0x2ca)]('classic-settings'),_0x390751=document['getElementById'](_0x2f64d8(0x22f));gameMode===_0x2f64d8(0x1ff)?(_0xfc5a1e[_0x2f64d8(0x2b8)][_0x2f64d8(0x252)]=_0x2f64d8(0x1ee),_0x390751[_0x2f64d8(0x2b8)][_0x2f64d8(0x252)]=_0x2f64d8(0x274)):(_0xfc5a1e['style']['display']=_0x2f64d8(0x274),_0x390751['style'][_0x2f64d8(0x252)]=_0x2f64d8(0x1ee)),updateSettingsOverlay(),showPage(_0x2f64d8(0x2a2));}function changeTimeLimit(_0x334663){const _0x5a541f=_0x1ac04e,_0x4f0a5e=document[_0x5a541f(0x2ca)](_0x5a541f(0x268)),_0xed51de=timeOptions[_0x5a541f(0x261)](timeLimitInMinutes);let _0x3a169e=_0xed51de+_0x334663;if(_0x3a169e<0x0)_0x3a169e=timeOptions[_0x5a541f(0x2aa)]-0x1;else _0x3a169e>=timeOptions[_0x5a541f(0x2aa)]&&(_0x3a169e=0x0);timeLimitInMinutes=timeOptions[_0x3a169e],_0x4f0a5e[_0x5a541f(0x262)]=timeLimitInMinutes+'분';}function nextProblem(){const _0x32b773=_0x1ac04e;closePopup(),currentProblem++,currentProblemAttempts=0x0,userVertices=[],userLines=[];if(gameMode===_0x32b773(0x237)){if(timerInterval){let _0x543856=null,_0x26fdf7=0x0;const _0x369372=0x64;while(!_0x543856&&_0x26fdf7<_0x369372){let _0x3d4329=selectedType===_0x32b773(0x1f4)?Math[_0x32b773(0x265)]()<0.5?_0x32b773(0x284):'point':selectedType;_0x543856=generateRandomProblem(_0x3d4329),_0x26fdf7++;}if(_0x543856)problemList[_0x32b773(0x259)](_0x543856);else{stopTimer(),showFinalResult();return;}}else{showFinalResult();return;}}if(gameMode===_0x32b773(0x1ff)&&currentProblem>=totalProblems){showFinalResult();return;}loadProblem(),saveGameState();}function handleTypeSelect(_0x2ff550){const _0x9afd2e=_0x1ac04e;document['querySelectorAll']('#type-select\x20button')[_0x9afd2e(0x2b7)](_0x361f0a=>_0x361f0a['classList'][_0x9afd2e(0x2e7)]('selected')),_0x2ff550[_0x9afd2e(0x206)][_0x9afd2e(0x22e)][_0x9afd2e(0x21e)](_0x9afd2e(0x2c5)),selectedType=_0x2ff550['currentTarget'][_0x9afd2e(0x26b)](_0x9afd2e(0x21c));}function handleDifficultySelect(_0x4f6c61){const _0x20cc24=_0x1ac04e;document['querySelectorAll']('#difficulty-select\x20button')['forEach'](_0x1535a3=>_0x1535a3[_0x20cc24(0x22e)][_0x20cc24(0x2e7)](_0x20cc24(0x2c5))),_0x4f6c61[_0x20cc24(0x206)][_0x20cc24(0x22e)][_0x20cc24(0x21e)](_0x20cc24(0x2c5)),selectedDifficulty=_0x4f6c61[_0x20cc24(0x206)]['getAttribute'](_0x20cc24(0x23d)),updateSettingsOverlay();}function changeQuantity(_0x4280bc){const _0x256143=_0x1ac04e,_0x19b333=parseInt(document[_0x256143(0x2ca)]('problem-quantity')[_0x256143(0x262)]);let _0x30ab4f=_0x19b333+_0x4280bc;if(_0x30ab4f<0x5)_0x30ab4f=0x5;if(_0x30ab4f>0x32)_0x30ab4f=0x32;document[_0x256143(0x2ca)](_0x256143(0x1ea))['textContent']=_0x30ab4f,totalProblems=_0x30ab4f;}function generateProblemWithRetry(_0x255a92,_0x461789=null){let _0x2060f0=null,_0x31a666=0x0;const _0x186eba=0x64;while(!_0x2060f0&&_0x31a666<_0x186eba){_0x2060f0=generateRandomProblem(_0x255a92,_0x461789),_0x31a666++;}return _0x2060f0;}function startQuiz(){const _0x549d04=_0x1ac04e;currentProblem=0x0,score={'results':[]},currentProblemAttempts=0x0,userVertices=[],userLines=[],tempLineStart=null,hoveredLine=null,problemList=[],hasSubmittedScore=![];if(selectedDifficulty===_0x549d04(0x29a)){gameMode===_0x549d04(0x237)&&(timeLimitInMinutes=0x2);totalProblems=0x3;if(selectedType==='line')problemList[_0x549d04(0x259)](generateProblemWithRetry(_0x549d04(0x284),0x3)),problemList[_0x549d04(0x259)](generateProblemWithRetry('line',0x4)),problemList[_0x549d04(0x259)](generateProblemWithRetry('line',0x5));else selectedType===_0x549d04(0x205)?(problemList[_0x549d04(0x259)](generateProblemWithRetry(_0x549d04(0x205),0x4)),problemList[_0x549d04(0x259)](generateProblemWithRetry(_0x549d04(0x205),0x4)),problemList['push'](generateProblemWithRetry(_0x549d04(0x205),0x4))):(problemList[_0x549d04(0x259)](generateProblemWithRetry('line',0x3)),problemList['push'](generateProblemWithRetry('line',0x4)),problemList[_0x549d04(0x259)](generateRandomProblem('point',0x4)));problemList=problemList['filter'](_0x21e047=>_0x21e047!==null),totalProblems=problemList[_0x549d04(0x2aa)];}else{let _0x542c4b=gameMode===_0x549d04(0x1ff)?totalProblems:0x1,_0x148e26=0x0;const _0x3e44c3=_0x542c4b*0x14;let _0x12684d=new Set();while(problemList['length']<_0x542c4b&&_0x148e26<_0x3e44c3){let _0x353bbc=selectedType===_0x549d04(0x1f4)?Math[_0x549d04(0x265)]()<0.5?_0x549d04(0x284):_0x549d04(0x205):selectedType;const _0x4e132b=generateRandomProblem(_0x353bbc);if(_0x4e132b&&_0x4e132b[_0x549d04(0x2b0)]['length']>=0x2){const _0x47a678=JSON['stringify'](_0x4e132b[_0x549d04(0x2b0)][_0x549d04(0x2c2)](_0xbbfb9c=>_0xbbfb9c['x']+','+_0xbbfb9c['y'])[_0x549d04(0x1e8)]());!_0x12684d[_0x549d04(0x24a)](_0x47a678)&&(problemList[_0x549d04(0x259)](_0x4e132b),_0x12684d['add'](_0x47a678));}_0x148e26++;}gameMode==='classic'&&(totalProblems=problemList['length']);}if(problemList[_0x549d04(0x2aa)]===0x0){alert(_0x549d04(0x2a0)),location[_0x549d04(0x26e)]();return;}showPage(_0x549d04(0x1f2));if(gameMode===_0x549d04(0x237))startTimer();loadProblem();}function loadProblem(){const _0x5d5210=_0x1ac04e,_0x133af6=gameMode===_0x5d5210(0x237);if(!_0x133af6&&currentProblem>=totalProblems&&totalProblems>0x0){showFinalResult();return;}if(_0x133af6&&currentProblem>=problemList[_0x5d5210(0x2aa)]&&!timerInterval){showFinalResult();return;}if(_0x133af6&&currentProblem>=problemList[_0x5d5210(0x2aa)]){}const _0x3d8502=document[_0x5d5210(0x2ca)](_0x5d5210(0x240)),_0x53a87d=document[_0x5d5210(0x2ca)]('problem-counter-display');_0x133af6?(_0x53a87d[_0x5d5210(0x2b8)][_0x5d5210(0x252)]=_0x5d5210(0x274),_0x3d8502['style'][_0x5d5210(0x252)]=_0x5d5210(0x1ee)):(_0x53a87d[_0x5d5210(0x2b8)][_0x5d5210(0x252)]=_0x5d5210(0x1ee),_0x3d8502['style']['display']='none',_0x53a87d[_0x5d5210(0x262)]='남은\x20문제\x20'+(totalProblems-(currentProblem+0x1))+'개');const _0x51c8af=problemList[currentProblem];if(!_0x51c8af){console[_0x5d5210(0x1fc)](_0x5d5210(0x2b1),{'currentProblem':currentProblem,'problemList':problemList}),showFinalResult();return;}const _0x1e0cf3=_0x51c8af[_0x5d5210(0x269)]==='line'?'선대칭':_0x5d5210(0x283);let _0x43ed6d=currentProblem+0x1+'번째\x20문제\x20('+_0x1e0cf3+')';const _0x365991=_0x51c8af[_0x5d5210(0x269)]==='line'?_0x5d5210(0x1ef):_0x5d5210(0x2ec);let _0x5990f4=_0x5d5210(0x2cc)+_0x365991+_0x5d5210(0x238);window['innerWidth']<0x1e0&&(_0x43ed6d=currentProblem+0x1+_0x5d5210(0x299)+_0x1e0cf3+')',_0x5990f4='아래\x20도형은\x20'+_0x365991+_0x5d5210(0x204)),document['getElementById'](_0x5d5210(0x20b))['innerHTML']=_0x43ed6d,document['getElementById'](_0x5d5210(0x29d))[_0x5d5210(0x2e8)]=_0x5990f4,document['getElementById']('check-answer-btn')['style'][_0x5d5210(0x252)]=_0x5d5210(0x1ee),document[_0x5d5210(0x2ca)](_0x5d5210(0x23a))['style'][_0x5d5210(0x252)]=_0x5d5210(0x274),closePopup(),problemVertices=_0x51c8af[_0x5d5210(0x2b0)],problemLines=_0x51c8af['initialLines'],tempLineStart=null,hoveredLine=null,setCanvasMode(_0x5d5210(0x2a7)),redrawCanvas();}function clearCanvas(_0x2c8a45){const _0x2b46d0=_0x1ac04e;_0x2c8a45&&(userVertices=[],userLines=[],tempLineStart=null,hoveredLine=null),redrawCanvas(),setCanvasMode('vertex'),closePopup(),document[_0x2b46d0(0x2ca)](_0x2b46d0(0x2e9))['style'][_0x2b46d0(0x252)]=_0x2b46d0(0x1ee),document[_0x2b46d0(0x2ca)](_0x2b46d0(0x23a))[_0x2b46d0(0x2b8)][_0x2b46d0(0x252)]=_0x2b46d0(0x274);}function renderProblemVertices(){const _0x37b5b0=_0x1ac04e;document[_0x37b5b0(0x207)](_0x37b5b0(0x21b))['forEach'](_0x3af11d=>_0x3af11d[_0x37b5b0(0x2e7)]()),problemVertices[_0x37b5b0(0x2b7)](_0x1f10d4=>{const _0x536171=_0x37b5b0,_0x39d93a=document[_0x536171(0x1f1)](_0x536171(0x295));_0x39d93a[_0x536171(0x215)]=_0x536171(0x1f6),_0x39d93a[_0x536171(0x2b8)][_0x536171(0x2d0)]=_0x1f10d4['x']/GRID_COUNT*0x64+'%',_0x39d93a[_0x536171(0x2b8)][_0x536171(0x24b)]=_0x1f10d4['y']/GRID_COUNT*0x64+'%',canvasWrapper[_0x536171(0x2a9)](_0x39d93a);});}function drawGrid(){const _0x385190=_0x1ac04e;ctx['strokeStyle']=_0x385190(0x226),ctx[_0x385190(0x288)]=0.5,ctx[_0x385190(0x1f7)]([0x1,0x4]);for(let _0x586a13=0x0;_0x586a13<=canvas['width'];_0x586a13+=GRID_SIZE){ctx[_0x385190(0x239)](),ctx[_0x385190(0x214)](_0x586a13,0x0),ctx[_0x385190(0x229)](_0x586a13,canvas[_0x385190(0x2ba)]),ctx[_0x385190(0x253)]();}for(let _0x5b2deb=0x0;_0x5b2deb<=canvas[_0x385190(0x2ba)];_0x5b2deb+=GRID_SIZE){ctx[_0x385190(0x239)](),ctx['moveTo'](0x0,_0x5b2deb),ctx[_0x385190(0x229)](canvas[_0x385190(0x25a)],_0x5b2deb),ctx[_0x385190(0x253)]();}ctx[_0x385190(0x1f7)]([]);if(problemList[_0x385190(0x2aa)]>currentProblem&&problemList[currentProblem]){const _0x3dee60=problemList[currentProblem];ctx[_0x385190(0x2d8)]='#ff0000',ctx['lineWidth']=0x2;if(_0x3dee60[_0x385190(0x269)]===_0x385190(0x284)){if(_0x3dee60[_0x385190(0x223)])ctx[_0x385190(0x239)](),ctx[_0x385190(0x214)](0x0,0x0),ctx[_0x385190(0x229)](canvas[_0x385190(0x25a)],canvas['height']),ctx[_0x385190(0x253)]();else{if(_0x3dee60['axisDirection']===_0x385190(0x210)){const _0x212af3=canvas[_0x385190(0x25a)]/0x2;ctx[_0x385190(0x239)](),ctx[_0x385190(0x214)](_0x212af3,0x0),ctx['lineTo'](_0x212af3,canvas[_0x385190(0x2ba)]),ctx['stroke']();}else{if(_0x3dee60['axisDirection']===_0x385190(0x224)){const _0x357465=canvas[_0x385190(0x2ba)]/0x2;ctx[_0x385190(0x239)](),ctx['moveTo'](0x0,_0x357465),ctx[_0x385190(0x229)](canvas[_0x385190(0x25a)],_0x357465),ctx[_0x385190(0x253)]();}}}}else{if(_0x3dee60['type']===_0x385190(0x205)){const _0x156103=canvas[_0x385190(0x25a)]/0x2,_0x3156a8=canvas['height']/0x2;ctx[_0x385190(0x239)](),ctx[_0x385190(0x279)](_0x156103,_0x3156a8,0x5,0x0,Math['PI']*0x2),ctx[_0x385190(0x217)]=_0x385190(0x24e),ctx[_0x385190(0x220)]();}}}}function drawLines(_0x5b2b35,_0x460fde){const _0x5353ed=_0x1ac04e;ctx[_0x5353ed(0x2d8)]=_0x460fde,ctx[_0x5353ed(0x288)]=0x3,_0x5b2b35[_0x5353ed(0x2b7)](_0x5bae68=>{const _0x11aa9f=_0x5353ed;ctx[_0x11aa9f(0x239)](),ctx['moveTo'](_0x5bae68['p1']['x']*GRID_SIZE,_0x5bae68['p1']['y']*GRID_SIZE),ctx['lineTo'](_0x5bae68['p2']['x']*GRID_SIZE,_0x5bae68['p2']['y']*GRID_SIZE),ctx[_0x11aa9f(0x253)]();});}function redrawCanvas(){const _0x51dbc6=_0x1ac04e;ctx[_0x51dbc6(0x28d)](0x0,0x0,canvas[_0x51dbc6(0x25a)],canvas[_0x51dbc6(0x2ba)]),drawGrid(),drawLines(problemLines,_0x51dbc6(0x256)),drawLines(userLines,'#28a745'),hoveredLine&&(ctx[_0x51dbc6(0x20e)](),ctx[_0x51dbc6(0x2d8)]='rgba(234,\x20153,\x20153,\x200.5)',ctx[_0x51dbc6(0x288)]=0x8,ctx['shadowColor']=_0x51dbc6(0x2db),ctx[_0x51dbc6(0x2a5)]=0xa,ctx['beginPath'](),ctx[_0x51dbc6(0x214)](hoveredLine['p1']['x']*GRID_SIZE,hoveredLine['p1']['y']*GRID_SIZE),ctx[_0x51dbc6(0x229)](hoveredLine['p2']['x']*GRID_SIZE,hoveredLine['p2']['y']*GRID_SIZE),ctx[_0x51dbc6(0x253)](),ctx[_0x51dbc6(0x2b9)]()),renderProblemVertices(),canvasMode===_0x51dbc6(0x284)?renderPointsForLineMode():renderUserVertices();}function renderPointsForLineMode(){const _0x46624c=_0x1ac04e;document[_0x46624c(0x207)](_0x46624c(0x228))['forEach'](_0x18c780=>_0x18c780['remove']());const _0x2355c4=[...problemVertices,...userVertices][_0x46624c(0x2de)]((_0x641d12,_0x493cae,_0x564d9a)=>_0x493cae===_0x564d9a['findIndex'](_0x3557b4=>isSamePoint(_0x3557b4,_0x641d12)));_0x2355c4[_0x46624c(0x2b7)](_0x484347=>{const _0x5afae1=_0x46624c,_0x4216e2=document[_0x5afae1(0x1f1)](_0x5afae1(0x295));_0x4216e2['className']=tempLineStart&&isSamePoint(_0x484347,tempLineStart)?_0x5afae1(0x2a6):_0x5afae1(0x254),_0x4216e2[_0x5afae1(0x2b8)]['left']=_0x484347['x']/GRID_COUNT*0x64+'%',_0x4216e2[_0x5afae1(0x2b8)][_0x5afae1(0x24b)]=_0x484347['y']/GRID_COUNT*0x64+'%',canvasWrapper[_0x5afae1(0x2a9)](_0x4216e2);});}function renderUserVertices(){const _0x594fb1=_0x1ac04e;document[_0x594fb1(0x207)](_0x594fb1(0x228))['forEach'](_0x41ba81=>_0x41ba81[_0x594fb1(0x2e7)]()),userVertices[_0x594fb1(0x2b7)](_0x35bbe8=>{const _0x4d4d43=_0x594fb1,_0x351d7e=document[_0x4d4d43(0x1f1)](_0x4d4d43(0x295));_0x351d7e[_0x4d4d43(0x215)]=_0x4d4d43(0x1e9),_0x351d7e[_0x4d4d43(0x2b8)]['left']=_0x35bbe8['x']/GRID_COUNT*0x64+'%',_0x351d7e['style'][_0x4d4d43(0x24b)]=_0x35bbe8['y']/GRID_COUNT*0x64+'%',canvasWrapper[_0x4d4d43(0x2a9)](_0x351d7e);});}function isVertexOnProblemBoundary(_0x16574c){const _0x59c894=_0x1ac04e;return problemVertices[_0x59c894(0x1eb)](_0x3bfde8=>isSamePoint(_0x3bfde8,_0x16574c));}function showPopup(_0x5c7a71,_0x5c6f3b,_0x27026e){const _0x57c644=_0x1ac04e,_0x4f9d32=document['getElementById']('result-popup-overlay'),_0x3e0089=document[_0x57c644(0x2ca)](_0x57c644(0x201)),_0x20e28a=document[_0x57c644(0x2ca)]('popup-detail-message'),_0x19ec85=document['getElementById'](_0x57c644(0x2ae));_0x27026e?(_0x3e0089[_0x57c644(0x2e8)]=_0x5c7a71,_0x3e0089[_0x57c644(0x215)]=_0x57c644(0x25d),_0x20e28a[_0x57c644(0x2b8)][_0x57c644(0x252)]=_0x57c644(0x274),_0x19ec85['style'][_0x57c644(0x252)]=_0x57c644(0x1ee)):(_0x3e0089[_0x57c644(0x2e8)]=_0x5c7a71+_0x57c644(0x1fb)+_0x5c6f3b+_0x57c644(0x29c),_0x3e0089[_0x57c644(0x215)]=_0x57c644(0x21d),_0x20e28a[_0x57c644(0x2b8)]['display']=_0x57c644(0x274),_0x19ec85[_0x57c644(0x2b8)][_0x57c644(0x252)]=_0x57c644(0x274)),_0x4f9d32[_0x57c644(0x2b8)][_0x57c644(0x252)]=_0x57c644(0x25e);}function closePopup(){const _0x1a848f=_0x1ac04e;document[_0x1a848f(0x2ca)](_0x1a848f(0x273))[_0x1a848f(0x2b8)][_0x1a848f(0x252)]='none';}function checkAnswer(){const _0x70c3a5=_0x1ac04e,_0x2c5cde=problemList[currentProblem];if(!_0x2c5cde)return![];const _0x502cb0=_0x2c5cde[_0x70c3a5(0x269)];let _0x39a966=checkVerticesSymmetry(_0x502cb0),_0x5dfca2=![];if(_0x39a966){if(_0x502cb0===_0x70c3a5(0x284))_0x5dfca2=checkLineSymmetryLines(_0x2c5cde);else{if(_0x502cb0===_0x70c3a5(0x205))_0x5dfca2=checkPointSymmetryLines(_0x2c5cde);}}if(_0x39a966&&_0x5dfca2)return score[_0x70c3a5(0x260)][_0x70c3a5(0x2aa)]===currentProblem&&score[_0x70c3a5(0x260)][_0x70c3a5(0x259)](currentProblemAttempts),showPopup(_0x70c3a5(0x264),'',!![]),saveGameState(),document[_0x70c3a5(0x2ca)](_0x70c3a5(0x2e9))[_0x70c3a5(0x2b8)][_0x70c3a5(0x252)]=_0x70c3a5(0x274),document['getElementById']('next-problem-btn')[_0x70c3a5(0x2b8)][_0x70c3a5(0x252)]=_0x70c3a5(0x1ee),!![];else{let _0x3e4b33;if(!_0x39a966)_0x3e4b33=_0x70c3a5(0x20c);else{if(!_0x5dfca2)_0x3e4b33='도형이\x20대칭을\x20이루지\x20않거나\x20빠뜨린\x20선분이\x20있어요.';else _0x3e4b33=_0x70c3a5(0x2ad);}return currentProblemAttempts++,saveGameState(),showPopup(_0x70c3a5(0x219),_0x3e4b33,![]),document[_0x70c3a5(0x2ca)](_0x70c3a5(0x2e9))['style']['display']=_0x70c3a5(0x1ee),document[_0x70c3a5(0x2ca)]('next-problem-btn')['style'][_0x70c3a5(0x252)]='none',![];}}function checkVerticesSymmetry(_0x68e99d){const _0x4f3d48=_0x1ac04e,_0x4cdb2c=problemList[currentProblem],_0x4410f5=_0x4cdb2c[_0x4f3d48(0x269)]===_0x4f3d48(0x284)&&_0x4cdb2c[_0x4f3d48(0x223)],_0x202341=new Map();[...problemVertices,...userVertices][_0x4f3d48(0x2b7)](_0x2715d9=>{const _0x29daf9=_0x4f3d48,_0x56dfa2=Math[_0x29daf9(0x2cb)](_0x2715d9['x'])+','+Math[_0x29daf9(0x2cb)](_0x2715d9['y']);if(!_0x202341[_0x29daf9(0x24a)](_0x56dfa2))_0x202341[_0x29daf9(0x2d1)](_0x56dfa2,{'x':Math[_0x29daf9(0x2cb)](_0x2715d9['x']),'y':Math[_0x29daf9(0x2cb)](_0x2715d9['y'])});});const _0x36a118=Array[_0x4f3d48(0x282)](_0x202341[_0x4f3d48(0x2d7)]());if(_0x68e99d===_0x4f3d48(0x284)){let _0x4338cf;if(_0x4410f5)_0x4338cf=_0x36a118[_0x4f3d48(0x2de)](_0x53167a=>_0x53167a['x']===_0x53167a['y'])[_0x4f3d48(0x2aa)];else{if(_0x4cdb2c['axisDirection']===_0x4f3d48(0x210))_0x4338cf=_0x36a118[_0x4f3d48(0x2de)](_0x59d5e9=>_0x59d5e9['x']===HALF_COUNT)[_0x4f3d48(0x2aa)];else{if(_0x4cdb2c['axisDirection']==='horizontal')_0x4338cf=_0x36a118[_0x4f3d48(0x2de)](_0x58282e=>_0x58282e['y']===HALF_COUNT)[_0x4f3d48(0x2aa)];}}if((_0x36a118['length']-_0x4338cf)%0x2!==0x0)return![];}let _0xb4595d=new Map();for(const _0x15b394 of _0x36a118){const _0xe4071c=_0x15b394['x']+','+_0x15b394['y'];if(_0xb4595d[_0x4f3d48(0x24a)](_0xe4071c))continue;const _0x4c5bcc=calculateSymmetricPoint(_0x15b394,_0x68e99d,_0x4410f5,_0x4cdb2c['axisDirection']);if(isSamePoint(_0x15b394,_0x4c5bcc)){_0xb4595d[_0x4f3d48(0x2d1)](_0xe4071c,!![]);continue;}if(!_0x36a118[_0x4f3d48(0x1eb)](_0x300305=>isSamePoint(_0x300305,_0x4c5bcc)))return![];_0xb4595d[_0x4f3d48(0x2d1)](_0xe4071c,!![]),_0xb4595d[_0x4f3d48(0x2d1)](_0x4c5bcc['x']+','+_0x4c5bcc['y'],!![]);}return!![];}function checkLineSymmetryLines(_0x5e96fd){const _0x1b8fb7=_0x1ac04e,_0x34b3e1=_0x5e96fd[_0x1b8fb7(0x2e4)][_0x1b8fb7(0x2c2)](_0x183c6e=>({'p1':calculateSymmetricPoint(_0x183c6e['p1'],_0x1b8fb7(0x284),_0x5e96fd[_0x1b8fb7(0x223)],_0x5e96fd[_0x1b8fb7(0x2c4)]),'p2':calculateSymmetricPoint(_0x183c6e['p2'],'line',_0x5e96fd[_0x1b8fb7(0x223)],_0x5e96fd[_0x1b8fb7(0x2c4)])}));if(userLines[_0x1b8fb7(0x2aa)]!==_0x34b3e1[_0x1b8fb7(0x2aa)])return![];for(const _0x46e78b of userLines)if(!_0x34b3e1[_0x1b8fb7(0x1eb)](_0x5c38e2=>isSameLine(_0x46e78b,_0x5c38e2)))return![];return!![];}function checkPointSymmetryLines(_0x68f3a7){const _0x16a9e6=_0x1ac04e,_0x104544=[...problemLines,...userLines],_0x3650e0=_0x68f3a7['allLines'];if(_0x104544['length']!==_0x3650e0[_0x16a9e6(0x2aa)])return![];const _0x22b00e=[..._0x3650e0];for(const _0x2d6616 of _0x104544){const _0x1f1ba3=_0x22b00e[_0x16a9e6(0x245)](_0xa61fa1=>isSameLine(_0x2d6616,_0xa61fa1));if(_0x1f1ba3===-0x1)return![];_0x22b00e['splice'](_0x1f1ba3,0x1);}return _0x22b00e[_0x16a9e6(0x2aa)]===0x0;}function findClosestValidLinePoint(_0x5da4d2){const _0x1d5ae1=_0x1ac04e,_0x59d4e4=[...problemVertices,...userVertices];if(problemList[_0x1d5ae1(0x2aa)]>currentProblem&&problemList[currentProblem][_0x1d5ae1(0x269)]===_0x1d5ae1(0x205))_0x59d4e4['push'](CENTER_POINT);let _0x21ef23=null,_0x477903=Infinity;for(const _0x28ae62 of _0x59d4e4){const _0x3d71f=distSq(_0x5da4d2,_0x28ae62);_0x3d71f<_0x477903&&(_0x477903=_0x3d71f,_0x21ef23=_0x28ae62);}return _0x21ef23;}function setCanvasMode(_0x3c8892){const _0x1d9a7d=_0x1ac04e;canvasMode=_0x3c8892;const _0x6ee103=document[_0x1d9a7d(0x2ca)](_0x1d9a7d(0x2a1)),_0x41784c=document[_0x1d9a7d(0x2ca)](_0x1d9a7d(0x27b));_0x6ee103['classList'][_0x1d9a7d(0x2e7)](_0x1d9a7d(0x29f)),_0x41784c[_0x1d9a7d(0x22e)][_0x1d9a7d(0x2e7)](_0x1d9a7d(0x29f));const _0x4374af=userVertices[_0x1d9a7d(0x2aa)]>=0x1||problemVertices[_0x1d9a7d(0x2aa)]>0x1;_0x3c8892===_0x1d9a7d(0x2a7)?(_0x6ee103[_0x1d9a7d(0x22e)]['add'](_0x1d9a7d(0x29f)),tempLineStart=null):(_0x41784c[_0x1d9a7d(0x22e)][_0x1d9a7d(0x21e)](_0x1d9a7d(0x29f)),_0x6ee103[_0x1d9a7d(0x1f8)]=![]),document['getElementById'](_0x1d9a7d(0x27b))[_0x1d9a7d(0x1f8)]=!_0x4374af,redrawCanvas();}function getTargetTimeForProblem(_0x586c80){const _0x1c6464=_0x1ac04e,_0x11f9ff=selectedDifficulty==0x2;return _0x586c80[_0x1c6464(0x269)]===_0x1c6464(0x284)?_0x11f9ff?0x14:0xa:_0x11f9ff?0x5a:0x3c;}function showFinalResult(){const _0x33fceb=_0x1ac04e;gameMode===_0x33fceb(0x237)&&stopTimer();gameMode==='timeAttack'&&selectedDifficulty!=='practice'&&(totalProblems=score['results'][_0x33fceb(0x2aa)]);saveGameState(),showPage('final-result-page');let _0x32736a=0x0,_0x4df588=0x0,_0x3bbb49=0x0;score[_0x33fceb(0x260)]['forEach'](_0x4f05a2=>{const _0x29df40=_0x33fceb;_0x4f05a2===0x0?(_0x32736a++,_0x3bbb49+=0x1):(_0x4df588++,_0x3bbb49+=Math[_0x29df40(0x249)](0x0,0x1-_0x4f05a2*0.4));});const _0x382354=score[_0x33fceb(0x260)]['length'],_0xdf14ca=_0x382354>0x0?parseFloat((_0x3bbb49/_0x382354*0x64)[_0x33fceb(0x2b5)](0x1)):0x0;finalAccuracyValue=_0xdf14ca;let _0x148d24=0x0;const _0x325f7e=selectedDifficulty===_0x33fceb(0x29a);document[_0x33fceb(0x2ca)](_0x33fceb(0x200))[_0x33fceb(0x262)]=_0x325f7e?_0x33fceb(0x27e):_0x33fceb(0x2c9);const _0x4ca7c5=document['querySelector'](_0x33fceb(0x28a)),_0x4d17b1=document['getElementById']('show-hof-btn');_0x325f7e?(_0x4ca7c5[_0x33fceb(0x2b8)][_0x33fceb(0x252)]=_0x33fceb(0x274),_0x4d17b1['style'][_0x33fceb(0x252)]=_0x33fceb(0x274)):(_0x4ca7c5['style'][_0x33fceb(0x252)]=_0x33fceb(0x1ee),_0x4d17b1['style']['display']='block');if(gameMode==='timeAttack'&&!_0x325f7e){const _0x394187=_0x382354;document[_0x33fceb(0x2ca)](_0x33fceb(0x278))['style'][_0x33fceb(0x252)]=_0x33fceb(0x1ee);if(_0x394187===0x0)_0x148d24=0x0,document[_0x33fceb(0x2ca)]('avg-time-display')['textContent']=_0x33fceb(0x2d4);else{const _0x39262c=timeLimitInMinutes*0x3c-remainingTime,_0x2ace17=_0x394187>0x0?_0x39262c/_0x394187:0x0;let _0x45c087=0x0;for(let _0xfad67f=0x0;_0xfad67f<_0x394187;_0xfad67f++){const _0x35a657=problemList[_0xfad67f];_0x35a657[_0x33fceb(0x269)]==='point'?selectedDifficulty==0x2?_0x45c087+=0x5a:_0x45c087+=0x3c:selectedDifficulty==0x2?_0x45c087+=0x14:_0x45c087+=0xa;}const _0x2a22ed=_0x394187>0x0?_0x45c087/_0x394187:0x0,_0x213508=_0x2ace17>0x0?_0x2a22ed/_0x2ace17:0x0,_0x24ee0f=selectedDifficulty==0x2?1.5:1.2;_0x148d24=Math['round'](_0x213508*(_0xdf14ca/0x64)*0x1388*_0x24ee0f),document[_0x33fceb(0x2ca)](_0x33fceb(0x227))[_0x33fceb(0x262)]=_0x2ace17[_0x33fceb(0x2b5)](0x1);}}else{document[_0x33fceb(0x2ca)](_0x33fceb(0x278))['style']['display']='none';if(!_0x325f7e){let _0x39715b=0x1;if(selectedType===_0x33fceb(0x205))_0x39715b=1.1;else{if(selectedType===_0x33fceb(0x1f4))_0x39715b=1.05;}const _0x1db462=selectedDifficulty==0x2?1.5:0x1;_0x148d24=Math[_0x33fceb(0x2cb)](_0x382354*_0xdf14ca*_0x1db462*_0x39715b);}}finalScoreValue=_0x148d24,document['getElementById'](_0x33fceb(0x26c))[_0x33fceb(0x262)]=_0x32736a,document[_0x33fceb(0x2ca)]('retried-count')[_0x33fceb(0x262)]=_0x4df588,document[_0x33fceb(0x2ca)](_0x33fceb(0x276))[_0x33fceb(0x262)]=_0xdf14ca+'%',!_0x325f7e&&(document[_0x33fceb(0x2ca)](_0x33fceb(0x2c1))[_0x33fceb(0x262)]=_0x148d24);}function handleCanvasMouseMove(_0x476d65){const _0x5e9e5e=_0x1ac04e;if(document[_0x5e9e5e(0x2ca)](_0x5e9e5e(0x2e9))['style'][_0x5e9e5e(0x252)]===_0x5e9e5e(0x274)){hoveredLine&&(hoveredLine=null,canvas[_0x5e9e5e(0x2b8)][_0x5e9e5e(0x26f)]='default',redrawCanvas());return;}const _0x1ee51c=canvas['getBoundingClientRect'](),_0x38217e=(_0x476d65['clientX']-_0x1ee51c[_0x5e9e5e(0x2d0)])/_0x1ee51c['width'],_0x5000e4=(_0x476d65[_0x5e9e5e(0x1f9)]-_0x1ee51c['top'])/_0x1ee51c[_0x5e9e5e(0x2ba)],_0x2c3d27=_0x38217e*canvas['width'],_0x3ea6b1=_0x5000e4*canvas['height'],_0x19c55c={'x':_0x2c3d27/GRID_SIZE,'y':_0x3ea6b1/GRID_SIZE};let _0x3c6992=null,_0x377e31=0.25;for(const _0x5d4d2c of userLines){const _0x1c5466=_0x5d4d2c['p1'],_0x13a992=_0x5d4d2c['p2'],_0x1fb2b3=distSq(_0x1c5466,_0x13a992);if(_0x1fb2b3===0x0)continue;let _0x3ec6cd=((_0x19c55c['x']-_0x1c5466['x'])*(_0x13a992['x']-_0x1c5466['x'])+(_0x19c55c['y']-_0x1c5466['y'])*(_0x13a992['y']-_0x1c5466['y']))/_0x1fb2b3;if(_0x3ec6cd>0.2&&_0x3ec6cd<0.8){const _0x36bf84={'x':_0x1c5466['x']+_0x3ec6cd*(_0x13a992['x']-_0x1c5466['x']),'y':_0x1c5466['y']+_0x3ec6cd*(_0x13a992['y']-_0x1c5466['y'])},_0x44f81f=distSq(_0x19c55c,_0x36bf84);_0x44f81f<_0x377e31&&(_0x377e31=_0x44f81f,_0x3c6992=_0x5d4d2c);}}!isSameLine(hoveredLine,_0x3c6992)&&(hoveredLine=_0x3c6992,redrawCanvas());if(hoveredLine)canvas['style']['cursor']='pointer';else{if(canvasMode===_0x5e9e5e(0x284))canvas['style'][_0x5e9e5e(0x26f)]=_0x5e9e5e(0x2ea);else canvas[_0x5e9e5e(0x2b8)][_0x5e9e5e(0x26f)]=_0x5e9e5e(0x2b6);}}function showQrPopup(){const _0x172e95=_0x1ac04e;document['getElementById'](_0x172e95(0x234))[_0x172e95(0x2b8)][_0x172e95(0x252)]=_0x172e95(0x25e);}function closeQrPopup(){const _0x1b041d=_0x1ac04e;document[_0x1b041d(0x2ca)]('qr-popup-overlay')[_0x1b041d(0x2b8)][_0x1b041d(0x252)]=_0x1b041d(0x274);}function showHofPopup(){const _0x7a424b=_0x1ac04e,_0x58aa88=document['getElementById'](_0x7a424b(0x2d5)),_0x507e15=document[_0x7a424b(0x24c)](_0x7a424b(0x218)),_0x2b7e4e=document[_0x7a424b(0x24c)]('#hof-table-classic\x20tbody'),_0x20d46c=document[_0x7a424b(0x24c)](_0x7a424b(0x2e2));document['getElementById'](_0x7a424b(0x28f))[_0x7a424b(0x2b8)][_0x7a424b(0x252)]=_0x7a424b(0x1ee),hasSubmittedScore?(_0x507e15[_0x7a424b(0x2b8)][_0x7a424b(0x252)]=_0x7a424b(0x274),_0x58aa88[_0x7a424b(0x262)]=_0x7a424b(0x2a4),_0x58aa88[_0x7a424b(0x2b8)][_0x7a424b(0x296)]='blue'):(_0x507e15[_0x7a424b(0x2b8)][_0x7a424b(0x252)]=_0x7a424b(0x1ee),_0x58aa88['textContent']='',document['getElementById'](_0x7a424b(0x287))[_0x7a424b(0x28c)]='',document[_0x7a424b(0x2ca)]('hof-submit-btn')[_0x7a424b(0x1f8)]=![]),_0x2b7e4e['innerHTML']=_0x7a424b(0x22b),_0x20d46c[_0x7a424b(0x2e8)]=_0x7a424b(0x22b),document['getElementById']('hof-popup-overlay')[_0x7a424b(0x2b8)][_0x7a424b(0x252)]='flex',fetch(webAppUrl)[_0x7a424b(0x257)](_0x127b2d=>_0x127b2d[_0x7a424b(0x1f5)]())['then'](_0x2b1632=>{const _0x26b6f8=_0x7a424b,_0x2f7bcf=_0x2b1632[_0x26b6f8(0x286)],_0x414c30=_0x2b1632[_0x26b6f8(0x2af)];populateHofTable(_0x2b7e4e,_0x2b1632[_0x26b6f8(0x1ff)]||[],_0x26b6f8(0x2be),_0x2f7bcf),populateHofTable(_0x20d46c,_0x2b1632[_0x26b6f8(0x237)]||[],_0x26b6f8(0x27c),_0x414c30);})[_0x7a424b(0x255)](_0x1471d5=>{const _0x88ba66=_0x7a424b;_0x2b7e4e[_0x88ba66(0x2e8)]=_0x88ba66(0x1f0),_0x20d46c[_0x88ba66(0x2e8)]='<tr><td\x20colspan=\x223\x22>기록을\x20불러오는\x20데\x20실패했습니다.</td></tr>',console[_0x88ba66(0x1fc)]('Error\x20fetching\x20leaderboard:',_0x1471d5);});}function populateHofTable(_0x4035c8,_0x303134,_0x4fbc26,_0xd2f77b){const _0x24c352=_0x1ac04e;_0x4035c8[_0x24c352(0x2e8)]='';if(_0xd2f77b){const _0x1f3a28='<tr\x20style=\x22font-weight:\x20bold;\x20color:\x20#4b8134;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>⭐</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>'+_0xd2f77b[_0x24c352(0x2dd)]+_0x24c352(0x2ab)+_0xd2f77b[_0x24c352(0x236)]+_0x24c352(0x2dc);_0x4035c8[_0x24c352(0x2e8)]+=_0x1f3a28;}if(!_0x303134||_0x303134[_0x24c352(0x2aa)]===0x0){_0x4035c8['innerHTML']+=_0x24c352(0x2bf)+_0x4fbc26+'\x20기록이\x20없습니다.</td></tr>';return;}const _0x185438=_0x303134[_0x24c352(0x2de)](_0x2eea68=>!(_0xd2f77b&&_0x2eea68['score']===_0xd2f77b['score']&&_0x2eea68['initial']===_0xd2f77b[_0x24c352(0x2dd)]));let _0x59c046=0x1,_0x5a5465=0x0,_0x533814=null;_0x185438[_0x24c352(0x2b7)]((_0x526007,_0x3c0a5a)=>{const _0x62fa84=_0x24c352;if(_0x533814!==null&&_0x526007[_0x62fa84(0x236)]<_0x533814)_0x59c046+=_0x5a5465+0x1,_0x5a5465=0x0;else _0x533814!==null&&_0x526007[_0x62fa84(0x236)]===_0x533814&&_0x5a5465++;_0x533814=_0x526007[_0x62fa84(0x236)];if(_0x59c046>0x14)return;let _0x1b6ee9='';if(_0x59c046===0x1)_0x1b6ee9=_0x62fa84(0x247);if(_0x59c046===0x2)_0x1b6ee9=_0x62fa84(0x2cf);if(_0x59c046===0x3)_0x1b6ee9='style=\x22color:\x20#cd7f32;\x20font-weight:\x20bold;\x20text-shadow:\x200\x200\x203px\x20#fff;\x22';const _0x39075b='<tr><td>'+_0x59c046+_0x62fa84(0x24f)+_0x1b6ee9+'>'+_0x526007[_0x62fa84(0x2dd)]+'\x20'+(_0x59c046===0x1?'🥇':_0x59c046===0x2?'🥈':_0x59c046===0x3?'🥉':'')+_0x62fa84(0x2c3)+_0x526007['score']+_0x62fa84(0x23f);_0x4035c8[_0x62fa84(0x2e8)]+=_0x39075b;});}function closeHofPopup(){const _0xe119b3=_0x1ac04e;document[_0xe119b3(0x2ca)]('hof-popup-overlay')[_0xe119b3(0x2b8)][_0xe119b3(0x252)]='none';}function saveGameState(){const _0x529eba=_0x1ac04e;if(document[_0x529eba(0x2ca)](_0x529eba(0x1f2))[_0x529eba(0x2b8)][_0x529eba(0x252)]===_0x529eba(0x1ee)&&problemList['length']===0x0)return;const _0x558bab={'problemList':problemList,'currentProblem':currentProblem,'score':score,'userVertices':userVertices,'userLines':userLines,'canvasMode':canvasMode,'selectedType':selectedType,'selectedDifficulty':selectedDifficulty,'totalProblems':totalProblems,'currentProblemAttempts':currentProblemAttempts,'finalScoreValue':finalScoreValue,'hasSubmittedScore':hasSubmittedScore,'gameMode':gameMode,'timeLimitInMinutes':timeLimitInMinutes,'remainingTime':remainingTime};localStorage[_0x529eba(0x242)]('quizState',JSON[_0x529eba(0x2e3)](_0x558bab));}function loadGameState(){const _0x56a7de=_0x1ac04e,_0xe1ef42=localStorage[_0x56a7de(0x1fe)](_0x56a7de(0x25c));if(!_0xe1ef42)return _0x56a7de(0x274);const _0x1178f2=JSON[_0x56a7de(0x2c6)](_0xe1ef42);if(!_0x1178f2||!_0x1178f2[_0x56a7de(0x263)]||_0x1178f2[_0x56a7de(0x263)][_0x56a7de(0x2aa)]===0x0||!_0x1178f2['score']||!_0x1178f2[_0x56a7de(0x2bb)])return clearGameState(),_0x56a7de(0x274);const _0x553af1=_0x1178f2[_0x56a7de(0x2bb)]==='classic'&&_0x1178f2[_0x56a7de(0x21a)]>0x0&&_0x1178f2[_0x56a7de(0x222)]<_0x1178f2[_0x56a7de(0x21a)],_0x3a91b8=_0x1178f2[_0x56a7de(0x2bb)]===_0x56a7de(0x237)&&_0x1178f2[_0x56a7de(0x272)]>0x0;if(_0x553af1||_0x3a91b8)return problemList=_0x1178f2[_0x56a7de(0x263)],currentProblem=_0x1178f2[_0x56a7de(0x222)],score=_0x1178f2[_0x56a7de(0x236)],canvasMode=_0x1178f2[_0x56a7de(0x23e)],selectedType=_0x1178f2['selectedType'],selectedDifficulty=_0x1178f2['selectedDifficulty'],totalProblems=_0x1178f2[_0x56a7de(0x21a)],currentProblemAttempts=_0x1178f2[_0x56a7de(0x25f)],finalScoreValue=_0x1178f2[_0x56a7de(0x2a8)],hasSubmittedScore=_0x1178f2[_0x56a7de(0x23c)],gameMode=_0x1178f2[_0x56a7de(0x2bb)],timeLimitInMinutes=_0x1178f2[_0x56a7de(0x2b4)],remainingTime=_0x1178f2[_0x56a7de(0x272)],userVertices=_0x1178f2['userVertices']||[],userLines=_0x1178f2['userLines']||[],gameMode===_0x56a7de(0x237)&&remainingTime>0x0&&startTimer(!![]),'in-progress';const _0x7a4197=_0x1178f2[_0x56a7de(0x236)][_0x56a7de(0x260)][_0x56a7de(0x2aa)]>0x0||_0x1178f2[_0x56a7de(0x2bb)]===_0x56a7de(0x237)&&_0x1178f2[_0x56a7de(0x272)]<=0x0,_0x4dc52b=_0x1178f2[_0x56a7de(0x2a8)]>0x0||_0x1178f2['score'][_0x56a7de(0x260)][_0x56a7de(0x2aa)]>0x0;if(_0x7a4197&&_0x4dc52b)return Object[_0x56a7de(0x22d)](window,_0x1178f2),_0x56a7de(0x294);return clearGameState(),_0x56a7de(0x274);}function clearGameState(){const _0x115318=_0x1ac04e;localStorage[_0x115318(0x27a)](_0x115318(0x25c));}function submitScore(){const _0x4af52f=_0x1ac04e,_0x3168cc=document[_0x4af52f(0x2ca)](_0x4af52f(0x287)),_0x314110=_0x3168cc[_0x4af52f(0x28c)],_0x4eb18e=document[_0x4af52f(0x2ca)](_0x4af52f(0x1ed)),_0x448eb8=document[_0x4af52f(0x2ca)]('hof-message');if(!/^[A-Z]{3}$/[_0x4af52f(0x216)](_0x314110)){_0x448eb8[_0x4af52f(0x262)]=_0x4af52f(0x2df),_0x448eb8[_0x4af52f(0x2b8)]['color']=_0x4af52f(0x213);return;}if(blockedWords[_0x4af52f(0x221)](_0x314110)){_0x448eb8[_0x4af52f(0x262)]='누군가를\x20비하하거나\x20불쾌감을\x20주는\x20단어는\x20사용할\x20수\x20없습니다.',_0x448eb8[_0x4af52f(0x2b8)][_0x4af52f(0x296)]=_0x4af52f(0x213);return;}_0x4eb18e[_0x4af52f(0x1f8)]=!![],_0x448eb8[_0x4af52f(0x262)]=_0x4af52f(0x2ac),_0x448eb8[_0x4af52f(0x2b8)][_0x4af52f(0x296)]='#333';const _0x44e180={'action':_0x4af52f(0x2a3),'initial':_0x314110,'score':finalScoreValue,'problems':problemList['length'],'accuracy':finalAccuracyValue,'difficulty':selectedDifficulty,'type':selectedType,'mode':gameMode};fetch(webAppUrl,{'method':_0x4af52f(0x2d9),'cache':_0x4af52f(0x241),'headers':{'Content-Type':'application/json'},'body':JSON[_0x4af52f(0x2e3)](_0x44e180)})['then'](_0x505762=>_0x505762[_0x4af52f(0x1f5)]())[_0x4af52f(0x257)](_0x19cb29=>{const _0x3443f3=_0x4af52f;if(_0x19cb29[_0x3443f3(0x233)]===_0x3443f3(0x24d))hasSubmittedScore=!![],saveGameState(),_0x448eb8['textContent']=_0x3443f3(0x2d3),_0x448eb8['style'][_0x3443f3(0x296)]=_0x3443f3(0x243),document[_0x3443f3(0x24c)](_0x3443f3(0x218))[_0x3443f3(0x2b8)][_0x3443f3(0x252)]=_0x3443f3(0x274),setTimeout(showHofPopup,0x5dc);else throw new Error(_0x19cb29[_0x3443f3(0x298)]||'알\x20수\x20없는\x20오류');})['catch'](_0x21c48f=>{const _0x22a1a8=_0x4af52f;_0x448eb8[_0x22a1a8(0x262)]=_0x22a1a8(0x22c),_0x448eb8[_0x22a1a8(0x2b8)][_0x22a1a8(0x296)]=_0x22a1a8(0x213),_0x4eb18e[_0x22a1a8(0x1f8)]=![],console[_0x22a1a8(0x1fc)](_0x22a1a8(0x212),_0x21c48f);});}function _0x4bd1(){const _0x579dfc=['mouseleave','#333','avg-time-display','.user-dot,\x20.line-dot,\x20.selected-line-dot','lineTo','concat','<tr><td\x20colspan=\x223\x22>불러오는\x20중...</td></tr>','등록에\x20실패했습니다.\x20다시\x20시도해주세요.','assign','classList','time-attack-settings','translateX(-100%)','transform\x20','clear-canvas-btn','result','qr-popup-overlay','30162LcSNch','score','timeAttack','입니다.\x20나머지\x20부분을\x20완성해\x20주세요.','beginPath','next-problem-btn','reduce','hasSubmittedScore','data-difficulty','canvasMode','</td></tr>','timer-display','no-cache','setItem','#4B8134','quantity-plus','findIndex','final-result-page','style=\x22color:\x20#d4af37;\x20font-weight:\x20bold;\x20text-shadow:\x200\x200\x204px\x20#fff,\x200\x200\x206px\x20#ff0;\x22','.canvas-wrapper','max','has','top','querySelector','success','#ff0000','</td><td\x20','abs','mode-selection-page','display','stroke','line-dot','catch','#007bff','then','slanted','push','width','qr-code-btn','quizState','correct','flex','currentProblemAttempts','results','indexOf','textContent','problemList','정답입니다🎉','random','click','show-hof-btn','time-limit-display','type','8722008tZFHlI','getAttribute','correct-count','mousedown','reload','cursor','visibilityState','9yUQaoo','remainingTime','result-popup-overlay','none','138spXePU','final-accuracy','reverse','time-attack-avg-time','arc','removeItem','mode-line','타임어택','transform\x200.2s\x20ease-out','연습\x20완료','cos','quantity-minus','getBoundingClientRect','from','점대칭','line','pagehide','classicTopScorer','hof-initial','lineWidth','4EwqyCx','.score-display','transition','value','clearRect','오류가\x20발생하여\x20앱을\x20초기화합니다:','hof-reset-message','복구\x20중\x20추가\x20오류\x20발생:','confirm-clear-popup-overlay','4220ExIYMU','padStart','finished','div','color','36692ukwSqQ','message','번째\x20문제<br>(','practice','getContext','</span>','problem-instruction','classic-mode-btn','mode-btn-active','문제\x20생성에\x20실패했습니다.\x20다른\x20설정으로\x20다시\x20시도해\x20주세요.','mode-vertex','setup-page','submitScore','이번\x20학습\x20기록은\x20이미\x20등록되었습니다.','shadowBlur','selected-line-dot','vertex','finalScoreValue','appendChild','length','\x20🏆</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>','등록\x20중...','꼭짓점이나\x20선분\x20연결에\x20오류가\x20있어\x20대칭도형이\x20완성되지\x20않았습니다.','popup-next-btn','timeAttackTopScorer','initialVertices','Problem\x20could\x20not\x20be\x20loaded.\x20Showing\x20final\x20result.','atan2','.progress-bar','timeLimitInMinutes','toFixed','crosshair','forEach','style','restore','height','gameMode','toString','hidden','클래식','<tr><td\x20colspan=\x223\x22>아직\x20등록된\x20','in-progress','final-score','map','</td><td>','axisDirection','selected','parse','282065IZSgxT','addEventListener','학습\x20완료','getElementById','round','아래\x20도형은\x20','#difficulty-select\x20button','translateX(0%)','style=\x22color:\x20#c0c0c0;\x20font-weight:\x20bold;\x20text-shadow:\x200\x200\x203px\x20#fff;\x22','left','set','time-minus','성공적으로\x20등록되었습니다!','N/A','hof-message','button','values','strokeStyle','POST','time-plus','rgba(234,\x20153,\x20153,\x200.7)','</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</tr>','initial','filter','이니셜은\x20영어\x20대문자\x203글자로\x20입력해주세요.','8096592QAifPM','floor','#hof-table-timeattack\x20tbody','stringify','initialLines','time-attack-mode-btn','진행\x20상황이\x20사라집니다.\x20정말로\x20첫\x20페이지로\x20돌아갈까요?','remove','innerHTML','check-answer-btn','pointer','mousemove','점대칭도형','mouseup','sort','user-dot','problem-quantity','some','54TQjWkL','hof-submit-btn','block','선대칭도형','<tr><td\x20colspan=\x223\x22>기록을\x20불러오는\x20데\x20실패했습니다.</td></tr>','createElement','problem-page','classic-settings','both','json','problem-dot','setLineDash','disabled','clientY','time-warning','<br><span\x20style=\x22font-size:\x2080%;\x22>','error','치명적인\x20오류가\x20발생하여\x20페이지를\x20새로고침합니다.','getItem','classic','final-result-title','popup-main-message','200626niBBqR','transform','입니다.<br>나머지\x20부분을\x20완성해\x20주세요.','point','currentTarget','querySelectorAll','#type-select\x20button','preventDefault','splice','problem-number','꼭짓점의\x20위치나\x20개수가\x20잘못되었어요.','sqrt','save','start-quiz-btn','vertical','9116513nGwNlB','Error\x20submitting\x20score:','red','moveTo','className','test','fillStyle','.hof-input-group','다시\x20생각해\x20볼까요?','totalProblems','.problem-dot','data-type','incorrect','add','clientX','fill','includes','currentProblem','isSlantedAxis','horizontal'];_0x4bd1=function(){return _0x579dfc;};return _0x4bd1();}function startTimer(_0x309e98=![]){const _0x5b5022=_0x1ac04e;stopTimer();if(!_0x309e98)remainingTime=timeLimitInMinutes*0x3c;const _0x3305cc=document[_0x5b5022(0x2ca)](_0x5b5022(0x240));_0x3305cc[_0x5b5022(0x2b8)][_0x5b5022(0x252)]=_0x5b5022(0x1ee),updateTimerDisplay(),timerInterval=setInterval(()=>{remainingTime--,updateTimerDisplay(),remainingTime<=0x0&&(stopTimer(),showFinalResult());},0x3e8);}function stopTimer(){clearInterval(timerInterval),timerInterval=null;}function updateTimerDisplay(){const _0x3ae785=_0x1ac04e,_0x5494f8=document[_0x3ae785(0x2ca)](_0x3ae785(0x240));if(remainingTime<0x0)remainingTime=0x0;const _0x38f657=Math[_0x3ae785(0x2e1)](remainingTime/0x3c),_0x167fbd=remainingTime%0x3c;_0x5494f8[_0x3ae785(0x262)]=_0x38f657+':'+_0x167fbd[_0x3ae785(0x2bc)]()[_0x3ae785(0x293)](0x2,'0'),_0x5494f8[_0x3ae785(0x22e)]['toggle'](_0x3ae785(0x1fa),remainingTime<=0x3c&&remainingTime>0x0);}window['onload']=()=>{const _0x374470=_0x1ac04e;try{setupGrid(),allPages['forEach'](_0x2ceba5=>{const _0x70c554=_0x3dfa,_0x5cc3be=document[_0x70c554(0x2ca)](_0x2ceba5);_0x5cc3be&&(_0x5cc3be[_0x70c554(0x2b8)][_0x70c554(0x252)]='none');});const _0x4288ea=loadGameState();if(_0x4288ea===_0x374470(0x294))showPage(_0x374470(0x246)),showFinalResult(),clearGameState();else _0x4288ea===_0x374470(0x2c0)?(showPage(_0x374470(0x1f2)),loadProblem()):(resetGame(),showPage('mode-selection-page'));initializeSetupListeners(),document[_0x374470(0x2ca)](_0x374470(0x29e))[_0x374470(0x2c8)]('click',()=>selectGameMode(_0x374470(0x1ff))),document[_0x374470(0x2ca)](_0x374470(0x2e5))[_0x374470(0x2c8)]('click',()=>selectGameMode(_0x374470(0x237))),document[_0x374470(0x2ca)]('back-to-mode-select-btn')['addEventListener'](_0x374470(0x266),()=>{const _0x4e327e=_0x374470;confirm(_0x4e327e(0x2e6))&&(resetGame(),showPage('mode-selection-page'));}),canvas[_0x374470(0x2c8)](_0x374470(0x2eb),handleCanvasMouseMove),canvas[_0x374470(0x2c8)](_0x374470(0x225),()=>{hoveredLine&&(hoveredLine=null,redrawCanvas());}),canvas[_0x374470(0x2c8)](_0x374470(0x266),_0x544924=>{const _0x2f5858=_0x374470;if(document[_0x2f5858(0x2ca)](_0x2f5858(0x2e9))[_0x2f5858(0x2b8)][_0x2f5858(0x252)]==='none')return;if(hoveredLine){userLines=userLines[_0x2f5858(0x2de)](_0x3deb16=>!isSameLine(_0x3deb16,hoveredLine)),hoveredLine=null,handleCanvasMouseMove(_0x544924),redrawCanvas(),saveGameState();return;}const _0x494b9f=canvas[_0x2f5858(0x281)](),_0xcd4dfa=(_0x544924[_0x2f5858(0x21f)]-_0x494b9f['left'])/_0x494b9f[_0x2f5858(0x25a)],_0x4b1fe3=(_0x544924[_0x2f5858(0x1f9)]-_0x494b9f[_0x2f5858(0x24b)])/_0x494b9f['height'],_0x595c04=Math[_0x2f5858(0x2cb)](_0xcd4dfa*canvas['width']/GRID_SIZE),_0x3f4777=Math[_0x2f5858(0x2cb)](_0x4b1fe3*canvas[_0x2f5858(0x2ba)]/GRID_SIZE);if(_0x595c04<0x0||_0x595c04>GRID_COUNT||_0x3f4777<0x0||_0x3f4777>GRID_COUNT)return;const _0x35b4d0={'x':_0x595c04,'y':_0x3f4777};if(canvasMode===_0x2f5858(0x2a7)){if(isVertexOnProblemBoundary(_0x35b4d0))return;const _0x3c3ead=userVertices['findIndex'](_0x1b9971=>isSamePoint(_0x1b9971,_0x35b4d0));_0x3c3ead>-0x1?(userVertices[_0x2f5858(0x20a)](_0x3c3ead,0x1),userLines=userLines['filter'](_0x442e5c=>!(isSamePoint(_0x442e5c['p1'],_0x35b4d0)||isSamePoint(_0x442e5c['p2'],_0x35b4d0)))):userVertices[_0x2f5858(0x259)](_0x35b4d0),redrawCanvas(),saveGameState();}else{if(canvasMode===_0x2f5858(0x284)){const _0x2b9f6f=findClosestValidLinePoint(_0x35b4d0);if(!_0x2b9f6f)return;if(!tempLineStart)tempLineStart=_0x2b9f6f;else{if(!isSamePoint(tempLineStart,_0x2b9f6f)){const _0x15cbff={'p1':tempLineStart,'p2':_0x2b9f6f};if(!isLineExists(_0x15cbff))userLines[_0x2f5858(0x259)](_0x15cbff);else userLines=userLines[_0x2f5858(0x2de)](_0x23ea8a=>!isSameLine(_0x23ea8a,_0x15cbff));}tempLineStart=null;}redrawCanvas(),saveGameState();}}}),document[_0x374470(0x2ca)](_0x374470(0x20f))[_0x374470(0x2c8)](_0x374470(0x266),startQuiz),document['getElementById']('next-problem-btn')[_0x374470(0x2c8)]('click',nextProblem),document[_0x374470(0x2ca)](_0x374470(0x232))[_0x374470(0x2c8)]('click',()=>{const _0x2edabb=_0x374470;document[_0x2edabb(0x2ca)](_0x2edabb(0x291))[_0x2edabb(0x2b8)][_0x2edabb(0x252)]=_0x2edabb(0x25e);}),document[_0x374470(0x24c)]('#problem-page\x20.home-button')[_0x374470(0x2c8)](_0x374470(0x266),()=>{const _0x2117be=_0x374470;confirm(_0x2117be(0x2e6))&&(resetGame(),showPage(_0x2117be(0x251)));}),document[_0x374470(0x2ca)](_0x374470(0x25b))[_0x374470(0x2c8)]('click',showQrPopup),document[_0x374470(0x2ca)](_0x374470(0x267))[_0x374470(0x2c8)](_0x374470(0x266),showHofPopup),document[_0x374470(0x2ca)](_0x374470(0x1ed))['addEventListener'](_0x374470(0x266),submitScore),document['getElementById']('confirm-clear-yes-btn')[_0x374470(0x2c8)](_0x374470(0x266),()=>{const _0xd51a60=_0x374470;clearCanvas(!![]),saveGameState(),document[_0xd51a60(0x2ca)](_0xd51a60(0x291))[_0xd51a60(0x2b8)]['display']='none';}),document[_0x374470(0x2ca)]('confirm-clear-no-btn')[_0x374470(0x2c8)](_0x374470(0x266),()=>{const _0x2aac22=_0x374470;document[_0x2aac22(0x2ca)](_0x2aac22(0x291))['style'][_0x2aac22(0x252)]=_0x2aac22(0x274);}),document[_0x374470(0x2ca)]('restart-btn')[_0x374470(0x2c8)](_0x374470(0x266),()=>{const _0x43e63a=_0x374470;resetGame(),showPage(_0x43e63a(0x251));});const _0x458abd=()=>{const _0x2d0b70=_0x374470;if(isExitingIntentionally)return;if(document['getElementById'](_0x2d0b70(0x1f2))['style'][_0x2d0b70(0x252)]===_0x2d0b70(0x1ee))saveGameState();};window['addEventListener'](_0x374470(0x285),_0x458abd),window[_0x374470(0x2c8)]('visibilitychange',()=>{const _0xa66212=_0x374470;if(document[_0xa66212(0x270)]===_0xa66212(0x2bd))_0x458abd();});const _0x4994d4=document['getElementById']('check-answer-btn'),_0x4f5053=_0x4994d4[_0x374470(0x24c)](_0x374470(0x2b3));let _0x32872e=null,_0x547e66=![];const _0x2bc84c=0x190,_0x108374=_0xa4a01=>{const _0x5b9216=_0x374470;if(_0xa4a01[_0x5b9216(0x269)]==='mousedown'&&_0xa4a01[_0x5b9216(0x2d6)]!==0x0)return;_0xa4a01[_0x5b9216(0x209)]();if(_0x547e66)return;_0x547e66=!![],_0x4f5053['style'][_0x5b9216(0x28b)]=_0x5b9216(0x231)+_0x2bc84c/0x3e8+'s\x20linear',_0x4f5053[_0x5b9216(0x2b8)][_0x5b9216(0x203)]=_0x5b9216(0x2ce),_0x32872e=setTimeout(()=>{if(!_0x547e66)return;const _0x395be2=checkAnswer();!_0x395be2&&_0x1429e1();},_0x2bc84c);},_0x1429e1=()=>{const _0x327c6c=_0x374470;if(!_0x547e66)return;_0x547e66=![],clearTimeout(_0x32872e),_0x32872e=null,_0x4f5053[_0x327c6c(0x2b8)][_0x327c6c(0x28b)]=_0x327c6c(0x27d),_0x4f5053[_0x327c6c(0x2b8)]['transform']=_0x327c6c(0x230);};_0x4994d4[_0x374470(0x2c8)](_0x374470(0x26d),_0x108374),_0x4994d4[_0x374470(0x2c8)]('touchstart',_0x108374,{'passive':![]}),_0x4994d4[_0x374470(0x2c8)](_0x374470(0x2ed),_0x1429e1),_0x4994d4[_0x374470(0x2c8)](_0x374470(0x225),_0x1429e1),_0x4994d4['addEventListener']('touchend',_0x1429e1);}catch(_0x5439d0){console['error'](_0x374470(0x28e),_0x5439d0),clearGameState();try{resetGame(),showPage(_0x374470(0x251)),initializeSetupListeners(),document[_0x374470(0x2ca)](_0x374470(0x29e))[_0x374470(0x2c8)](_0x374470(0x266),()=>selectGameMode(_0x374470(0x1ff))),document[_0x374470(0x2ca)](_0x374470(0x2e5))[_0x374470(0x2c8)](_0x374470(0x266),()=>selectGameMode('timeAttack'));}catch(_0x2dd192){console[_0x374470(0x1fc)](_0x374470(0x290),_0x2dd192),alert(_0x374470(0x1fd)),location[_0x374470(0x26e)]();}}};
+const _0x385e7b=_0xa2fb;(function(_0x308d3d,_0x5d7657){const _0x5d914b=_0xa2fb,_0x19b363=_0x308d3d();while(!![]){try{const _0x1dee9f=-parseInt(_0x5d914b(0x11d))/0x1+-parseInt(_0x5d914b(0x100))/0x2+parseInt(_0x5d914b(0x125))/0x3*(-parseInt(_0x5d914b(0x10d))/0x4)+-parseInt(_0x5d914b(0x112))/0x5*(parseInt(_0x5d914b(0x122))/0x6)+-parseInt(_0x5d914b(0xfb))/0x7+-parseInt(_0x5d914b(0xed))/0x8*(parseInt(_0x5d914b(0xf3))/0x9)+parseInt(_0x5d914b(0xe8))/0xa*(parseInt(_0x5d914b(0xe7))/0xb);if(_0x1dee9f===_0x5d7657)break;else _0x19b363['push'](_0x19b363['shift']());}catch(_0x55cb93){_0x19b363['push'](_0x19b363['shift']());}}}(_0x39c2,0xe8dd1));function _0x39c2(){const _0x85d91b=['qr-status-msg','target','submit-to-teacher-btn','데이터\x20전송\x20중...\x20⏳','전송\x20실패','18yJuLjF','location','선생님께\x20결과를\x20전송하려면\x20[번호나\x20별명]을\x20꼭\x20입력해주세요!\x20📝','올바른\x20구글\x20스프레드시트\x20주소가\x20아닙니다.\x20다시\x20확인해주세요!','https://script.google.com/macros/s/AKfycbxuGLE4Vku1hq0nyTHlbrosG-7_VLuZE3GF0Egv9Tm_BhwTj2Fn0nxMdmD7uBwtless/exec','URL\x20파싱\x20오류\x20🐛','click','then','13307042XMymjI','addEventListener','innerText','sheet-url-input','undefined','878204drvELy','getElementById','backgroundColor','final-result-page','src','이름없음','qr-large-img','POST','선생님께\x20결과가\x20성공적으로\x20전송되었습니다!\x20🎉','style','teacher-settings-btn','message','match','4hKHVFu','qr-display-area','제출\x20완료\x20✅','선생님께\x20제출하기\x20📝','error','274655dYhWId','stringify','DOMContentLoaded','disabled','trim','value','stopImmediatePropagation','#ff6b81','flex','연동\x20완료!','player-name','251631XgvnBz','display','inline-block','borderColor','unknown','174OGtTlE','avg-time-display','href','5085954CvMfjo','https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=','forEach','none','451inUzRH','2130290ZiuWxy','일반\x20플레이\x20QR','start-quiz-btn','settings-input-area','qr-fullscreen','7601296oboofz'];_0x39c2=function(){return _0x85d91b;};return _0x39c2();}const CENTRAL_GAS_URL=_0x385e7b(0xf7);let targetSheetId='';function _0xa2fb(_0x4b92f0,_0x54f00b){_0x4b92f0=_0x4b92f0-0xe6;const _0x39c288=_0x39c2();let _0xa2fbdd=_0x39c288[_0x4b92f0];return _0xa2fbdd;}function extractSheetId(_0x3cc0f4){const _0x462846=_0x385e7b,_0x2042d5=_0x3cc0f4[_0x462846(0x10c)](/\/d\/([a-zA-Z0-9-_]+)/);return _0x2042d5?_0x2042d5[0x1]:null;}window[_0x385e7b(0xfc)](_0x385e7b(0x114),()=>{const _0x41a6de=_0x385e7b,_0x575538=new URLSearchParams(window['location']['search']),_0x669f97=_0x575538['get']('s');if(_0x669f97)try{targetSheetId=decodeURIComponent(atob(_0x669f97));const _0x6d9740=document[_0x41a6de(0x101)](_0x41a6de(0x10a));if(_0x6d9740)_0x6d9740['style'][_0x41a6de(0x11e)]='none';}catch(_0x16b09b){console[_0x41a6de(0x111)](_0x41a6de(0xf8),_0x16b09b);}});function generateTeacherQR(){const _0xbc6695=_0x385e7b,_0x2e3b45=document[_0xbc6695(0x101)](_0xbc6695(0xfe))[_0xbc6695(0x117)][_0xbc6695(0x116)](),_0x3791cc=window[_0xbc6695(0xf4)][_0xbc6695(0x124)]['split']('?')[0x0];let _0x319eb5=_0x3791cc,_0x29577a=_0xbc6695(0xe9);if(_0x2e3b45){const _0x5df372=extractSheetId(_0x2e3b45);if(!_0x5df372){alert(_0xbc6695(0xf6));return;}const _0x13cc1e=btoa(encodeURIComponent(_0x5df372));_0x319eb5=_0x3791cc+'?s='+_0x13cc1e,_0x29577a=_0xbc6695(0x11b);}const _0x33daaa=_0xbc6695(0x126)+encodeURIComponent(_0x319eb5);document[_0xbc6695(0x101)]('teacher-qr-img')[_0xbc6695(0x104)]=_0x33daaa,document[_0xbc6695(0x101)](_0xbc6695(0x106))[_0xbc6695(0x104)]=_0x33daaa,document['getElementById'](_0xbc6695(0xee))['innerText']=_0x29577a,document['getElementById']('settings-input-area')['style']['display']=_0xbc6695(0xe6),document[_0xbc6695(0x101)](_0xbc6695(0x10e))[_0xbc6695(0x109)][_0xbc6695(0x11e)]=_0xbc6695(0x11a);}function resetTeacherSettings(){const _0x58bcaf=_0x385e7b;document[_0x58bcaf(0x101)](_0x58bcaf(0xfe))['value']='',document[_0x58bcaf(0x101)](_0x58bcaf(0x10e))[_0x58bcaf(0x109)][_0x58bcaf(0x11e)]=_0x58bcaf(0xe6),document['getElementById'](_0x58bcaf(0xeb))['style'][_0x58bcaf(0x11e)]=_0x58bcaf(0x11a);}function showFullscreenQR(){const _0x406479=_0x385e7b;document[_0x406479(0x101)](_0x406479(0xec))[_0x406479(0x109)]['display']=_0x406479(0x11a);}const originalStartBtn=document[_0x385e7b(0x101)](_0x385e7b(0xea));originalStartBtn[_0x385e7b(0xfc)]('click',_0x5e792d=>{const _0x24f0c5=_0x385e7b,_0x427760=document[_0x24f0c5(0x101)]('player-name')['value'][_0x24f0c5(0x116)]();if(targetSheetId&&!_0x427760){alert(_0x24f0c5(0xf5)),_0x5e792d[_0x24f0c5(0x118)]();return;}},!![]);const resultObserver=new MutationObserver(_0x46b8ad=>{const _0x1bbace=_0x385e7b;_0x46b8ad[_0x1bbace(0x127)](_0x26cd00=>{const _0x5bb393=_0x1bbace;_0x26cd00[_0x5bb393(0xef)][_0x5bb393(0x109)]['display']!==_0x5bb393(0xe6)&&targetSheetId&&(document[_0x5bb393(0x101)](_0x5bb393(0xf0))[_0x5bb393(0x109)]['display']=_0x5bb393(0x11f));});}),finalPage=document['getElementById'](_0x385e7b(0x103));finalPage&&resultObserver['observe'](finalPage,{'attributes':!![],'attributeFilter':[_0x385e7b(0x109)]});document[_0x385e7b(0x101)](_0x385e7b(0xf0))['addEventListener'](_0x385e7b(0xf9),function(){const _0x5b7248=_0x385e7b;if(!targetSheetId)return;const _0x2f0705=document[_0x5b7248(0x101)](_0x5b7248(0x11c))[_0x5b7248(0x117)][_0x5b7248(0x116)]()||_0x5b7248(0x105),_0x33a9ba=this;_0x33a9ba[_0x5b7248(0xfd)]=_0x5b7248(0xf1),_0x33a9ba[_0x5b7248(0x115)]=!![],_0x33a9ba[_0x5b7248(0x109)]['backgroundColor']='#ccc',_0x33a9ba[_0x5b7248(0x109)][_0x5b7248(0x120)]='#ccc';const _0x3b46c4={'sheetId':targetSheetId,'studentName':_0x2f0705,'mode':typeof gameMode!=='undefined'?gameMode:_0x5b7248(0x121),'type':typeof selectedType!==_0x5b7248(0xff)?selectedType:_0x5b7248(0x121),'difficulty':typeof selectedDifficulty!==_0x5b7248(0xff)?selectedDifficulty:'unknown','problems':typeof totalProblems!==_0x5b7248(0xff)?totalProblems:0x0,'score':typeof finalScoreValue!==_0x5b7248(0xff)?finalScoreValue:0x0,'accuracy':typeof finalAccuracyValue!==_0x5b7248(0xff)?finalAccuracyValue:0x0,'avgSpeed':document[_0x5b7248(0x101)](_0x5b7248(0x123))?parseFloat(document[_0x5b7248(0x101)]('avg-time-display')['innerText']):0x0};fetch(CENTRAL_GAS_URL,{'method':_0x5b7248(0x107),'body':JSON[_0x5b7248(0x113)](_0x3b46c4)})['then'](_0x4c151a=>_0x4c151a['json']())[_0x5b7248(0xfa)](_0x356f30=>{const _0x1e4ac9=_0x5b7248;if(_0x356f30['result']==='success')alert(_0x1e4ac9(0x108)),_0x33a9ba['innerText']=_0x1e4ac9(0x10f);else throw new Error(_0x356f30[_0x1e4ac9(0x10b)]||_0x1e4ac9(0xf2));})['catch'](_0x85bd4f=>{const _0x9c3afe=_0x5b7248;console['error'](_0x85bd4f),alert('통신\x20중\x20오류가\x20발생했습니다.\x20잠시\x20후\x20다시\x20시도해\x20주세요.'),_0x33a9ba[_0x9c3afe(0xfd)]=_0x9c3afe(0x110),_0x33a9ba['disabled']=![],_0x33a9ba[_0x9c3afe(0x109)][_0x9c3afe(0x102)]='#ff6b81',_0x33a9ba[_0x9c3afe(0x109)][_0x9c3afe(0x120)]=_0x9c3afe(0x119);});});
 </script>
 
 </body>
