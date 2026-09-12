@@ -1903,11 +1903,16 @@ document.getElementById('submit-to-teacher-btn').addEventListener('click', funct
         avgSpeed: document.getElementById('avg-time-display') ? parseFloat(document.getElementById('avg-time-display').innerText) : 0
     };
 
+// 💡 수정된 부분: headers를 명시하여 브라우저가 응답을 무사히 받도록 합니다.
     fetch(CENTRAL_GAS_URL, {
         method: 'POST',
+        headers: {
+            'Content-Type': 'text/plain;charset=utf-8'
+        },
         body: JSON.stringify(payload)
     })
     .then(res => res.json())
+    // ... 이하 기존 코드와 동일 ...
     .then(data => {
         if (data.result === 'success') {
             alert("선생님께 결과가 성공적으로 전송되었습니다! 🎉");
